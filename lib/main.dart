@@ -1,6 +1,6 @@
   import 'package:flutter/material.dart';
-  import 'package:metal/page/home.dart';
-  import 'package:metal/page/search.dart';
+  import 'package:metal/widgets/index.dart';
+  import 'package:metal/pages/search.dart';
 
   void main() => runApp(MyApp());
 
@@ -10,11 +10,10 @@
       return MaterialApp(
         debugShowCheckedModeBanner: false,
         routes: <String, WidgetBuilder> {
-          '/page/search': (_) => new SearchPage(),
+          '/pages/search': (_) => new SearchPage(),
         },
         title: 'Flutter Demo',
-//        theme: ThemeData.light(),
-        home: HomePage(title: '首页'),
+        home: Navigatorpage(title: '首页'),
       );
     }
   }
