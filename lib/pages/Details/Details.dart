@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:metal/pages/home/swiper.dart';
 import 'package:metal/data/global_config.dart';
-import 'package:metal/pages/cs.dart';
 
 class Details extends StatefulWidget {
   @override
@@ -154,29 +153,42 @@ class _DetailsheaderState extends State<Detailsheader> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Container(
-            child:Row(
+            child:Flex(
+              direction: Axis.horizontal,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    Text('眼镜厂废料',style: new TextStyle(fontSize: 20.0,fontWeight: FontWeight.bold),), 
-                    Container(
-                      margin: const  EdgeInsets.fromLTRB(5.0, 2.0, 0.0, 0.0),
-                      padding: const EdgeInsets.fromLTRB(2.0, 0.0, 2.0, 0.0),
-                      child: Text('供应资源',style: new TextStyle(fontSize: 12.0,color:Colors.red),),
-                      decoration: BoxDecoration(
-                        border: Border.all(width: 1,color: Colors.red)
-                      ),
-                    )
-                  ],
+                Expanded(
+                  flex: 2,
+                  child: Container(
+                    child: Wrap(
+                      direction: Axis.horizontal,
+                      children: <Widget>[
+                        Text(
+                          '眼镜厂废料眼镜厂废料眼镜厂废料眼镜厂废料眼镜厂废料眼镜厂废料',
+                          style: new TextStyle(fontSize: 20.0,fontWeight: FontWeight.bold),
+                          overflow: TextOverflow.ellipsis,
+                          softWrap: true,
+                          maxLines: 2,
+                        ), 
+                      ],
+                    ),
+                  ),
                 ),
-                Icon(Icons.share,color: Color(0xFF424242)),
+                Ink(
+                  child:InkWell(
+                    onTap: (){
+                      print("index");
+                    },
+                    child:Container(
+                      child: Icon(Icons.share,color: Color(0xFF424242)),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
           Container(
-            child: Text("¥ 300.0/吨",style: new TextStyle(fontSize: 16.0,fontWeight: FontWeight.bold,color: Colors.red),),
+            child: Text("¥ 300.0万元/吨",style: new TextStyle(fontSize: 16.0,fontWeight: FontWeight.bold,color: Colors.red),),
           ),
           Container(
             padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
@@ -260,8 +272,20 @@ class _DetailsMoreState extends State<DetailsMore> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Container(
-                  child: Text('眼镜厂废料',style: TextStyles.TextStyle1(),),
+                Row(
+                  children: <Widget>[
+                    Container(
+                      child: Text('眼镜厂废料',style: TextStyles.TextStyle1(),),
+                    ),
+                    Container(
+                      margin: const  EdgeInsets.fromLTRB(5.0, 3.0, 0.0, 0.0),
+                      padding: const EdgeInsets.fromLTRB(2.0, 0.0, 2.0, 0.0),
+                      child: Text('供应资源',style: new TextStyle(fontSize: 12.0,color:Colors.red),),
+                      decoration: BoxDecoration(
+                        border: Border.all(width: 1,color: Colors.red)
+                      ),
+                    ),
+                  ],
                 ),
                 Container(
                   child:Flex(
@@ -416,7 +440,7 @@ class _DetailsTableState extends State<DetailsTable> {
               columnWidths: const <int, TableColumnWidth>{
                 0: FixedColumnWidth(50.0),
                 1: FixedColumnWidth(50.0),
-                2: FixedColumnWidth(50.0),
+                2: FixedColumnWidth(40.0),
               },
               defaultVerticalAlignment: TableCellVerticalAlignment.middle,
               border: TableBorder.symmetric(
@@ -471,6 +495,22 @@ class _DetailsTableState extends State<DetailsTable> {
                     Container(
                       padding: const EdgeInsets.fromLTRB(5.0, 0.0, 0.0, 0.0),
                       child: Text('2019-2-28',style: new TextStyle(fontSize: 14.0),),
+                    ),
+                  ],
+                ),
+                TableRow(
+                  children: <Widget>[
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(5.0, 0.0, 0.0, 0.0),
+                      child: Text('牛肉面',style: new TextStyle(fontSize: 14.0),),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(5.0, 0.0, 0.0, 0.0),
+                      child: Text('¥ 100.0万元/吨',style: new TextStyle(fontSize: 14.0),),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(5.0, 0.0, 0.0, 0.0),
+                      child: Text('2019-2-29',style: new TextStyle(fontSize: 14.0),),
                     ),
                   ],
                 ),

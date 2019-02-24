@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:metal/data/global_config.dart';
 import 'package:metal/pages/home/swiper.dart';
-import 'package:material_search/material_search.dart';
+import 'package:metal/pages/search/search.dart';
 import 'package:metal/pages/home/filterbar.dart';
 import 'package:metal/pages/home/images.dart';
 import 'package:metal/pages/home/pullbody.dart';
@@ -108,43 +107,6 @@ class BarSearch extends StatefulWidget{
   }
 }
 class _BarSearchState extends State<BarSearch>{
-  _buildMaterialSearchPage(BuildContext context) {
-    return new MaterialPageRoute<String>(
-        settings: new RouteSettings(
-          name: 'material_search',
-          isInitialRoute: false,
-        ),
-        builder: (BuildContext context) {
-          return new Material(
-            child: new MaterialSearch<String>(
-              placeholder: '请输入搜索金属……',
-              results: GlobalSearch().history.map((String v) => new MaterialSearchResult<String>(
-                icon: Icons.history,
-                value: v,
-                text: "$v",
-              )).toList(),
-              filter: (dynamic value, String criteria) {
-                return value.toLowerCase().trim().contains(new RegExp(r'' + criteria.toLowerCase().trim() + ''));
-              },
-              onSelect: (dynamic value) {
-                Navigator.of(context).pushNamed('/page/search');
-                print(value);
-              },
-              onSubmit: (dynamic value) {
-                Navigator.of(context).pushNamed('/page/search');
-                print(value);
-              },
-            ),
-          );
-        }
-    );
-  }
-  _showMaterialSearch(BuildContext context) {
-    Navigator.of(context)
-        .push(_buildMaterialSearchPage(context))
-        .then((dynamic value) {});
-  }
-
   Widget build(BuildContext context) {
     return new Container(
       child: new FlatButton(
@@ -153,7 +115,7 @@ class _BarSearchState extends State<BarSearch>{
             new Container(
               child: new FlatButton.icon(
                 onPressed: () {
-                  _showMaterialSearch(context);
+                  Navigator.of(context).pushNamed('/search');
                 },
                 icon: new Icon(
                     Icons.search,
@@ -169,7 +131,7 @@ class _BarSearchState extends State<BarSearch>{
           ],
         ),
         onPressed: () {
-          _showMaterialSearch(context);
+          Navigator.of(context).pushNamed('/search');
         },
       ),
       decoration: new BoxDecoration(

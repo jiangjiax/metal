@@ -8,13 +8,13 @@ class Value {
 }
 
 class GlobalSearch {
-  final List<String> data = <String>[
-    'iron',
-    '磷铜',
-    '镍铁',
-    '硅钙合金',
-    '白铜',
-  ];
+  // final List<String> data = <String>[
+  //   'iron',
+  //   '磷铜',
+  //   '镍铁',
+  //   '硅钙合金',
+  //   '白铜',
+  // ];
   final List<String> history = <String>[
     'iron',
     '磷铜',
