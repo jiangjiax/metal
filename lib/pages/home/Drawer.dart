@@ -38,7 +38,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
                     CateOptions(),
                   ],
                 ),
-                new Divider(color: Color(0xFF757575)),
+                new Divider(color: Color(0xFFBDBDBD)),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 10.0),
                   child: Text("价格",style:TextStyles.TextStyle2(),), 
@@ -83,7 +83,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
                     ],
                   ),
                 ),
-                new Divider(color: Color(0xFF757575)),
+                new Divider(color: Color(0xFFBDBDBD)),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 10.0),
                   child: Text("数量",style:TextStyles.TextStyle2(),), 
@@ -128,13 +128,13 @@ class _FilterDrawerState extends State<FilterDrawer> {
                     ],
                   ),
                 ),
-                new Divider(color: Color(0xFF757575)),
+                new Divider(color: Color(0xFFBDBDBD)),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 10.0),
                   child: Text("品种",style:TextStyles.TextStyle2(),), 
                 ),
                 MetalsOptions(),
-                new Divider(color: Color(0xFF757575)),
+                new Divider(color: Color(0xFFBDBDBD)),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 5.0),
                   child: Text("城市",style:TextStyles.TextStyle2(),), 
@@ -239,7 +239,6 @@ class _CateOptionsState extends State<CateOptions> {
             return Ink(
               width: 90.0,
               height: 40.0,
-              color:Color(0xFFEEEEEE),
               child:InkWell(
                 onTap: () {
                   setState(() {
@@ -264,12 +263,16 @@ class _CateOptionsState extends State<CateOptions> {
                       color: Drawers.Cate[index].color==true?Colors.blue:Colors.black,
                     )
                   ),
+                  decoration: BoxDecoration(
+                    color:Color(0xFFEEEEEE),
+                    borderRadius: BorderRadius.circular(5.0),
+                  ),
                 ),
               )
             );
           },
         ).toList(),
-      )
+      ),
     );
   }
 }
@@ -285,44 +288,48 @@ class _MetalsOptionsState extends State<MetalsOptions> {
     return Container(
       padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
         child:Wrap(
+          alignment: WrapAlignment.start,
           spacing: 6.0,
           runSpacing: 6.0,
           children: List<Widget>.generate(
-            Drawers.alignmentValues.length, (int index) {
+            metals.length, (int index) {
               return Ink(
                 width: 90.0,
                 height: 40.0,
-                color:Color(0xFFEEEEEE),
                 child:InkWell(
                   onTap: () {
                     setState(() {
-                      if (Drawers.alignmentValues[index].color == true) {
-                        Drawers.alignmentValues[index].color = false;
+                      if (metals[index].color == true) {
+                        metals[index].color = false;
                       } else{
                         if (index==0) {
                           List<Widget>.generate(
-                            Drawers.alignmentValues.length, (int index) {
-                              Drawers.alignmentValues[index].color = false;
+                            metals.length, (int index) {
+                              metals[index].color = false;
                             }
                           ).toList();
-                          Drawers.alignmentValues[index].color = true;
+                          metals[index].color = true;
                         }else{
-                          Drawers.alignmentValues[index].color = true;
-                          Drawers.alignmentValues[0].color = false;
+                          metals[index].color = true;
+                          metals[0].color = false;
                         }
                       }
                     });
-                    print(Drawers.alignmentValues[index].color);
+                    print(metals[index].color);
                   },
                   child: Container(
                     alignment: Alignment.center,
                     child:new Text(
-                      Drawers.alignmentValues[index].text,
+                      metals[index].text,
                       overflow: TextOverflow.ellipsis,
                       style:new TextStyle(
                         fontSize: 15.0,
-                        color: Drawers.alignmentValues[index].color==true?Colors.blue:Colors.black,
+                        color: metals[index].color==true?Colors.blue:Colors.black,
                       )
+                    ),
+                    decoration: BoxDecoration(
+                      color:Color(0xFFEEEEEE),
+                      borderRadius: BorderRadius.circular(5.0),
                     ),
                   ),
                 )

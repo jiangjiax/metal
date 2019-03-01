@@ -29,7 +29,7 @@ class BottomClipperTest extends CustomClipper<Path>{
     var path = Path();
     path.lineTo(0, 0);//左上角
     path.lineTo(0, size.height);//左下角
-    var firstControlPoint =Offset(size.width/2,size.height-15);
+    var firstControlPoint =Offset(size.width/2,size.height-20);
     var firstEndPoint = Offset(size.width,size.height);
     path.quadraticBezierTo(firstControlPoint.dx, firstControlPoint.dy, firstEndPoint.dx, firstEndPoint.dy);
     path.lineTo(size.width, size.height-40);

@@ -13,11 +13,11 @@ class Filterbar extends StatefulWidget {
 }
 
 class _FilterbarState extends State<Filterbar> {
-  Color _textColorEntire = GlobalButton.textColorBefore;
+  Color _textColorEntire = GlobalButton.textColorAfter;
   Color _textColoNew = GlobalButton.textColorBefore;
   Color _textColorNumber = GlobalButton.textColorBefore;
   Color _textColorSelect = GlobalButton.textColorBefore;
-  Color _backColorEntire = GlobalButton.backColorBefore;
+  Color _backColorEntire = GlobalButton.backColorAfter;
   Color _backColoNew = GlobalButton.backColorBefore;
   Color _backColorNumber = GlobalButton.backColorBefore;
   Color _backColorSelect = GlobalButton.backColorBefore;
@@ -45,9 +45,7 @@ class _FilterbarState extends State<Filterbar> {
                 splashColor: Colors.blue,
                 color: _backColorEntire,
                 shape: BorderDirectional(
-                  end: new BorderSide(color: Color(0xFFE0E0E0), style: BorderStyle.solid,),
-                  top: new BorderSide(color: Color(0xFFE0E0E0), style: BorderStyle.solid,),
-                  bottom: new BorderSide(color: Color(0xFFE0E0E0), style: BorderStyle.solid,),
+                  end: new BorderSide(color: Color(0xFFEEEEEE)),
                 ),
                 // 水波纹颜色
               ),
@@ -70,9 +68,9 @@ class _FilterbarState extends State<Filterbar> {
                 splashColor: Colors.blue,
                 color: _backColoNew,
                 shape: BorderDirectional(
-                  end: new BorderSide(color: Color(0xFFE0E0E0), style: BorderStyle.solid,),
-                  top: new BorderSide(color: Color(0xFFE0E0E0), style: BorderStyle.solid,),
-                  bottom: new BorderSide(color: Color(0xFFE0E0E0), style: BorderStyle.solid,),
+                  end: new BorderSide(color: Color(0xFFEEEEEE),),
+                  // top: new BorderSide(color: Color(0xFFE0E0E0),),
+                  // bottom: new BorderSide(color: Color(0xFFE0E0E0),),
                 ),
                 // 水波纹颜色
               ),
@@ -83,10 +81,10 @@ class _FilterbarState extends State<Filterbar> {
             child: new Container(
               height: 40.0,
               child: new FlatButton(
-                child: Text("数量",style: TextStyles.TextStyle1(),),
+                child: Text("最热",style: TextStyles.TextStyle1(),),
                 onPressed: () {
                   onFlatButton(3,context);
-                  print('数量');
+                  print('最热');
                 },
                 textTheme: ButtonTextTheme.accent,
                 textColor: _textColorNumber,
@@ -95,9 +93,7 @@ class _FilterbarState extends State<Filterbar> {
                 splashColor: Colors.blue,
                 color: _backColorNumber,
                 shape: BorderDirectional(
-                  end: new BorderSide(color: Color(0xFFE0E0E0), style: BorderStyle.solid,),
-                  top: new BorderSide(color: Color(0xFFE0E0E0), style: BorderStyle.solid,),
-                  bottom: new BorderSide(color: Color(0xFFE0E0E0), style: BorderStyle.solid,),
+                  end: new BorderSide(color: Color(0xFFEEEEEE),),
                 ),
                 // 水波纹颜色
               ),
@@ -108,15 +104,14 @@ class _FilterbarState extends State<Filterbar> {
             child: new Container(
               height: 40.0,
               child: new FlatButton(
-                child:Flex(
-                  direction: Axis.horizontal,
+                child:Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Expanded(
-                      child: Text("筛选",style: TextStyles.TextStyle1(),),
-                    ),
-                    Expanded(
-                      child: Icon(Icons.select_all,color: _textColorSelect,),
-                    ),
+                    Text("筛选",style: TextStyles.TextStyle1(),),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+                      child:Icon(Icons.select_all,color: _textColorSelect,),
+                    )
                   ]
                 ),
                 onPressed: () {
@@ -131,8 +126,8 @@ class _FilterbarState extends State<Filterbar> {
                 splashColor: Colors.blue,
                 color: _backColorSelect,
                 shape: BorderDirectional(
-                  top: new BorderSide(color: Color(0xFFE0E0E0), style: BorderStyle.solid,),
-                  bottom: new BorderSide(color: Color(0xFFE0E0E0), style: BorderStyle.solid,),
+                  // top: new BorderSide(color: Color(0xFFE0E0E0),),
+                  // bottom: new BorderSide(color: Color(0xFFE0E0E0),),
                 ),
                 // 水波纹颜色
               ),

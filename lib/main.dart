@@ -1,6 +1,9 @@
   import 'package:flutter/material.dart';
-  import 'package:metal/widgets/index.dart';
+  import 'package:metal/index.dart';
   import 'package:metal/pages/search/search.dart';
+  import 'package:metal/pages/add/add.dart';
+  import 'package:metal/pages/my/login.dart';
+  import 'package:flutter_localizations/flutter_localizations.dart';
 
   void main() => runApp(MyApp());
 
@@ -8,12 +11,25 @@
     @override
     Widget build(BuildContext context) {
       return MaterialApp(
+        localizationsDelegates: [
+          // 本地化的代理类
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        supportedLocales: [
+          const Locale('en', 'US'), // 美国英语
+          const Locale('zh', 'CH'), // 中文简体
+          //其它Locales
+        ],
         debugShowCheckedModeBanner: false,
         routes: <String, WidgetBuilder> {
           '/search': (_) => new SearchPage(),
+          '/go': (_) => new Add(),
+          '/logingo': (_) => new LoginPage(),
+          '/logins': (_) => new LoginsPage(),
         },
         title: 'Flutter Demo',
-        home: Navigatorpage(title: '首页'),
+        home: Navigatorpage(),
       );
     }
   }

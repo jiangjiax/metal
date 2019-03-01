@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:metal/pages/home/home.dart';
 import 'package:metal/pages/home/Drawer.dart';
-import 'package:metal/pages/Details/Details.dart';
-import 'package:metal/pages/cs.dart';
+import 'package:metal/pages/newprice/newprice.dart';
+import 'package:metal/pages/FAB.dart';
+import 'package:metal/pages/message/message.dart';
+import 'package:metal/pages/my/my.dart';
 
 class Navigatorpage extends StatefulWidget {
   Navigatorpage({Key key, this.title}) : super(key: key);
@@ -26,9 +28,9 @@ class _NavigatorpageState extends State<Navigatorpage> {
     _pages = [
       // ScrollControllerTestRoute(),
       HomePages(global: _globalKey),
-      Container(color: Colors.brown),
-      Container(color: Colors.amber),
-      Container(color: Colors.grey),
+      NewPrice(),
+      Message(),
+      My(),
     ];
   }
 
@@ -66,22 +68,19 @@ class _NavigatorpageState extends State<Navigatorpage> {
           });
         },
       ),
-      bottomNavigationBar: BottomNavigationBar(
+      bottomNavigationBar: FABBottomAppBar(
+        centerItemText: '发布',
+        color: Colors.grey,
+        selectedColor: Colors.blue,
+        notchedShape: CircularNotchedRectangle(),
+        onTabSelected: _onItemTapped,
+        selectedIndexs:_selectedIndex,
         items: [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.home), title: Text('首页')),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.call_missed), title: Text('行情')),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.add), title: Text('发布')),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.message), title: Text('消息')),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.person), title: Text('我的')),
+          FABBottomAppBarItem(iconData: Icons.home, text: '首页'),
+          FABBottomAppBarItem(iconData: Icons.call_missed, text: '行情'),
+          FABBottomAppBarItem(iconData: Icons.message, text: '消息'),
+          FABBottomAppBarItem(iconData: Icons.person, text: '我的'),
         ],
-        onTap: _onItemTapped,
-        currentIndex: _selectedIndex,
-        type: BottomNavigationBarType.fixed,
       ),
     );
   }
@@ -95,9 +94,7 @@ class _NavigatorpageState extends State<Navigatorpage> {
   }
 
   void onBigImgTap() {
-    setState(() {
-      _onItemTapped(2);
-    });
+    Navigator.of(context).pushNamed('/go');
   }
 }
 

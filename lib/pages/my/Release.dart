@@ -2,13 +2,72 @@ import 'package:flutter/material.dart';
 import 'package:metal/data/global_config.dart';
 import 'package:metal/pages/Details/Details.dart';
 
-class Pullbody extends StatefulWidget {
+class Release extends StatefulWidget {
   @override
-  _PullbodyState createState() {
-    return _PullbodyState();
+  _ReleaseState createState() {
+    return _ReleaseState();
   }
 }
-class _PullbodyState extends State<Pullbody> {
+class _ReleaseState extends State<Release> {
+  @override
+  Widget build(BuildContext context) {
+    return new DefaultTabController(
+      length: 3,
+      child: new Scaffold(
+        appBar: new AppBar(
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Color(0xFF64B5F6),
+                  Color(0xFF1976D2),
+                ],
+              ),
+            ),
+          ),          
+          elevation: 0.0,
+          title: Text('我的发布'),
+          bottom: new TabBar(
+            tabs: [
+              new Tab(text: "供应资源"),
+              new Tab(text: "采购资源"),
+            ],
+          ),
+        ),
+        body: new TabBarView(
+          children: [
+            Container(
+              color: Color(0xFFEEEEEE),
+              child:ListView(
+                children: <Widget>[
+                  Releasebody(),
+                  new Divider(height: 0,)
+                ],
+              )
+            ),
+            Container(
+              color: Color(0xFFEEEEEE),
+              child:ListView(
+                children: <Widget>[
+                  Releasebody(),
+                  new Divider(height: 0,)
+                ],
+              )
+            ),
+          ]
+        ),
+      ),
+    );
+  }
+}
+
+class Releasebody extends StatefulWidget {
+  @override
+  _ReleasebodyState createState() {
+    return _ReleasebodyState();
+  }
+}
+class _ReleasebodyState extends State<Releasebody> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -16,7 +75,7 @@ class _PullbodyState extends State<Pullbody> {
         physics: ClampingScrollPhysics(),
         scrollDirection: Axis.vertical,
         shrinkWrap: true, 
-        itemCount: 10,
+        itemCount: 3,
         separatorBuilder: (BuildContext context, int index) => new Divider(height: 0,color: Color(0xFFBDBDBD),),
         itemBuilder: (context, index) {
           return new Material( 
@@ -29,7 +88,7 @@ class _PullbodyState extends State<Pullbody> {
                     new MaterialPageRoute(builder: (context) => new Details()),
                   );
                 },
-                child:PullbodyCard(),
+                child:ReleasebodyCard(),
               ),
             ),
           );
@@ -39,7 +98,7 @@ class _PullbodyState extends State<Pullbody> {
   }
 }
 
-class PullbodyCard extends StatelessWidget {
+class ReleasebodyCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new Container(

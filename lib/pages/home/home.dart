@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:metal/pages/home/swiper.dart';
-import 'package:metal/pages/search/search.dart';
 import 'package:metal/pages/home/filterbar.dart';
 import 'package:metal/pages/home/images.dart';
 import 'package:metal/pages/home/pullbody.dart';
@@ -23,7 +22,6 @@ class _HomePagesState extends State<HomePages> {
   void initState() {
     //监听滚动事件，打印滚动位置
     _controller.addListener(() {
-      // print(_controller.offset); //打印滚动位置
       if (_controller.offset < 10 && showToTopBtn) {
         setState(() {
           showToTopBtn = false;
@@ -54,7 +52,9 @@ class _HomePagesState extends State<HomePages> {
               delegate: SliverChildListDelegate([
                 SwiperPage(),
                 Images(),
+                new Divider(height: 0,color: Color(0xFFBDBDBD),),
                 Filterbar(globals: this.widget.global),
+                new Divider(height: 0,color: Color(0xFFBDBDBD),),
                 Pullbody(),
               ]),
             )
@@ -64,6 +64,7 @@ class _HomePagesState extends State<HomePages> {
       floatingActionButton: !showToTopBtn ? null : FloatingActionButton(
           child: Icon(Icons.arrow_upward),
           heroTag: 'Tag2',
+          backgroundColor: Colors.orange,
           onPressed: () {
             // 返回到顶部时执行动画
             _controller.animateTo(.0,
@@ -78,29 +79,33 @@ class _HomePagesState extends State<HomePages> {
 
 Widget HomeAppbar() {
   return new AppBar(
-    flexibleSpace: Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Color(0xFF42A5F5),
-            Color(0xFF1976D2),
-          ],
-        ),
-      ),
-    ),
-    titleSpacing:0,
+    elevation: 0.0,
+    // flexibleSpace: Container(
+    //   decoration: BoxDecoration(
+    //     gradient: LinearGradient(
+    //       colors: [
+    //         Color(0xFF64B5F6),
+    //         Color(0xFF1976D2),
+    //       ],
+    //     ),
+    //   ),
+    // ),   
+    titleSpacing:10.0,
     leading: new IconButton(
-      icon: new Icon(
-        Icons.android,
-        color: Colors.white,
+      icon: new Image.asset(
+        "images/logo.png",
+        fit: BoxFit.fill,
       ),
       onPressed: () {},
     ),
-    title:BarSearch(),
+    title:BarSearch(value:"搜索金属"),
   );
 }
 //搜索条
 class BarSearch extends StatefulWidget{
+  BarSearch({Key key, this.value}) : super(key: key);
+  final String value;
+
   @override
   _BarSearchState createState() {
     return _BarSearchState();
@@ -109,6 +114,7 @@ class BarSearch extends StatefulWidget{
 class _BarSearchState extends State<BarSearch>{
   Widget build(BuildContext context) {
     return new Container(
+      margin: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
       child: new FlatButton(
         child: new Row(
           children: <Widget>[
@@ -123,7 +129,7 @@ class _BarSearchState extends State<BarSearch>{
                     size: 25.0
                 ),
                 label: new Text(
-                  "搜索金属",
+                  this.widget.value,
                   style: new TextStyle(color: Colors.white,fontSize: 18.0),
                 ),
               )
