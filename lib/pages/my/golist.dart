@@ -29,7 +29,6 @@ class _ListGoState extends State<ListGo> {
                   Container(
                     child: TextField(
                       controller: _controller,
-                      obscureText: true,
                       keyboardType: TextInputType.number,
                       decoration: const InputDecoration(
                         labelText: '¥ 请输入充值金额',

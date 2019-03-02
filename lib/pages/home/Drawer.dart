@@ -13,8 +13,8 @@ class FilterDrawer extends StatefulWidget {
 
 //筛选
 class _FilterDrawerState extends State<FilterDrawer> {
-    ScrollController _controller = new ScrollController();
-    bool showToTopBtn = true; //是否显示“返回到顶部”按钮
+  ScrollController _controller = new ScrollController();
+  bool showToTopBtn = true; //是否显示“返回到顶部”按钮
 
   @override
   Widget build(BuildContext context) {

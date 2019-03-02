@@ -403,7 +403,7 @@ class PullbodyCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text('2019-01-01 19:00:00  上海',style: TextStyles.TextStyle4(),),
-                      Text('采购资源',style: TextStyles.TextStyle4(),),
+                      Text('采购资源',style: TextStyle(fontSize: 12.0,color: Color(0xFF616161),fontWeight: FontWeight.bold),),
                     ],
                   ),
                 ],

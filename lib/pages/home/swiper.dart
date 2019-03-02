@@ -16,7 +16,7 @@ class SwiperPageState extends State<SwiperPage> {
       clipper: BottomClipperTest(),
       child: Container(
 //        color:Colors.green,
-        height: 200.0,
+        height: 190.0,
         child: SwiperPages(),
       ),
     );

@@ -20,7 +20,6 @@ class _DealsState extends State<Deals> {
         color: Color(0xFFEEEEEE),
         child:ListView(
           children: <Widget>[
-            Interval_space(),
             DealsbodyMaterial(),
           ],
         )

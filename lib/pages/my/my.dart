@@ -122,6 +122,17 @@ class MyBody extends StatefulWidget {
 }
 
 class MyBodyState extends State<MyBody> {
+  static SlideTransition createTransition(
+    Animation<double> animation, Widget child) {
+      return new SlideTransition(
+          position: new Tween<Offset>(
+          begin: const Offset(1.0, 0.0),
+          end: const Offset(0.0, 0.0),
+      ).animate(animation),
+          child: child,
+      );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -213,8 +224,22 @@ class MyBodyState extends State<MyBody> {
             child: Ink(
               child: InkWell(
                 onTap: (){
-                  Navigator.of(context).push(
-                    new MaterialPageRoute(builder: (context) => new Release()),
+                  Navigator.push<String>(
+                    context,
+                    new PageRouteBuilder(pageBuilder: (BuildContext context,
+                        Animation<double> animation,
+                        Animation<double> secondaryAnimation) {
+                          // 跳转的路由对象
+                          return new Release();
+                    }, transitionsBuilder: (
+                      BuildContext context,
+                      Animation<double> animation,
+                      Animation<double> secondaryAnimation,
+                      Widget child,
+                    ) {
+                      return MyBodyState
+                          .createTransition(animation, child);
+                    })
                   );
                 },
                 child: Container(
@@ -243,8 +268,22 @@ class MyBodyState extends State<MyBody> {
             child: Ink(
               child: InkWell(
                 onTap: (){
-                  Navigator.of(context).push(
-                    new MaterialPageRoute(builder: (context) => new List()),
+                  Navigator.push<String>(
+                    context,
+                    new PageRouteBuilder(pageBuilder: (BuildContext context,
+                        Animation<double> animation,
+                        Animation<double> secondaryAnimation) {
+                          // 跳转的路由对象
+                          return new List();
+                    }, transitionsBuilder: (
+                      BuildContext context,
+                      Animation<double> animation,
+                      Animation<double> secondaryAnimation,
+                      Widget child,
+                    ) {
+                      return MyBodyState
+                          .createTransition(animation, child);
+                    })
                   );
                 },
                 child: Container(
@@ -273,8 +312,22 @@ class MyBodyState extends State<MyBody> {
             child: Ink(
               child: InkWell(
                 onTap: (){
-                  Navigator.of(context).push(
-                    new MaterialPageRoute(builder: (context) => new Wallet()),
+                  Navigator.push<String>(
+                    context,
+                    new PageRouteBuilder(pageBuilder: (BuildContext context,
+                        Animation<double> animation,
+                        Animation<double> secondaryAnimation) {
+                          // 跳转的路由对象
+                          return new Wallet();
+                    }, transitionsBuilder: (
+                      BuildContext context,
+                      Animation<double> animation,
+                      Animation<double> secondaryAnimation,
+                      Widget child,
+                    ) {
+                      return MyBodyState
+                          .createTransition(animation, child);
+                    })
                   );
                 },
                 child: Container(
@@ -333,8 +386,22 @@ class MyBodyState extends State<MyBody> {
             child: Ink(
               child: InkWell(
                 onTap: (){
-                  Navigator.of(context).push(
-                    new MaterialPageRoute(builder: (context) => new Examine()),
+                  Navigator.push<String>(
+                    context,
+                    new PageRouteBuilder(pageBuilder: (BuildContext context,
+                        Animation<double> animation,
+                        Animation<double> secondaryAnimation) {
+                          // 跳转的路由对象
+                          return new Examine();
+                    }, transitionsBuilder: (
+                      BuildContext context,
+                      Animation<double> animation,
+                      Animation<double> secondaryAnimation,
+                      Widget child,
+                    ) {
+                      return MyBodyState
+                          .createTransition(animation, child);
+                    })
                   );
                 },
                 child: Container(
@@ -346,7 +413,7 @@ class MyBodyState extends State<MyBody> {
                       Container(
                         child:Row(children: <Widget>[
                           Icon(Icons.mail,size: 30,color: Colors.lime),
-                          Text(" 资源检验",style:TextStyle(fontSize: 16.0))
+                          Text(" 我的检验",style:TextStyle(fontSize: 16.0))
                         ],)
                       ),
                       Icon(Icons.keyboard_arrow_right,size: 30,color: Colors.lime,),
@@ -363,8 +430,22 @@ class MyBodyState extends State<MyBody> {
             child: Ink(
               child: InkWell(
                 onTap: (){
-                  Navigator.of(context).push(
-                    new MaterialPageRoute(builder: (context) => new Company()),
+                  Navigator.push<String>(
+                    context,
+                    new PageRouteBuilder(pageBuilder: (BuildContext context,
+                        Animation<double> animation,
+                        Animation<double> secondaryAnimation) {
+                          // 跳转的路由对象
+                          return new Company();
+                    }, transitionsBuilder: (
+                      BuildContext context,
+                      Animation<double> animation,
+                      Animation<double> secondaryAnimation,
+                      Widget child,
+                    ) {
+                      return MyBodyState
+                          .createTransition(animation, child);
+                    })
                   );
                 },
                 child: Container(
@@ -393,8 +474,22 @@ class MyBodyState extends State<MyBody> {
             child: Ink(
               child: InkWell(
                 onTap: (){
-                  Navigator.of(context).push(
-                    new MaterialPageRoute(builder: (context) => new Help()),
+                  Navigator.push<String>(
+                    context,
+                    new PageRouteBuilder(pageBuilder: (BuildContext context,
+                        Animation<double> animation,
+                        Animation<double> secondaryAnimation) {
+                          // 跳转的路由对象
+                          return new Help();
+                    }, transitionsBuilder: (
+                      BuildContext context,
+                      Animation<double> animation,
+                      Animation<double> secondaryAnimation,
+                      Widget child,
+                    ) {
+                      return MyBodyState
+                          .createTransition(animation, child);
+                    })
                   );
                 },
                 child: Container(

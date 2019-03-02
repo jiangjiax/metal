@@ -140,7 +140,7 @@ class HorizontalBarLabelChart extends StatelessWidget {
     return new HorizontalBarLabelChart(
       _createSampleData(),
       // Disable animations for image tests.
-      animate: false,
+      animate: true,
     );
   }
 

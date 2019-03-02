@@ -40,7 +40,7 @@ class _NavigatorpageState extends State<Navigatorpage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _globalKey,
-      endDrawer: FilterDrawer(global: _globalKey),
+      endDrawer: appbars_page?FilterDrawer(global: _globalKey):null,
       appBar: appbars_page?HomeAppbar():null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(

@@ -6,7 +6,6 @@ import 'package:metal/pages/home/pullbody.dart';
 
 class HomePages extends StatefulWidget {
   HomePages({Key key, this.global}) : super(key: key);
-
   final GlobalKey<ScaffoldState> global;
 
   @override

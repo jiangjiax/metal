@@ -14,11 +14,10 @@ class _ExamineState extends State<Examine> {
     return new Scaffold(
       appBar: new AppBar(     
         elevation: 0.0,
-        title: Text('资源检验'),
+        title: Text('我的检验'),
       ),
       body: ListView(
         children: <Widget>[
-          Interval_space(),
           ExamineMaterial(),
           new Divider(height: 0,)
         ],

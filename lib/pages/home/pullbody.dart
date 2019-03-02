@@ -9,6 +9,17 @@ class Pullbody extends StatefulWidget {
   }
 }
 class _PullbodyState extends State<Pullbody> {
+  static SlideTransition createTransition(
+    Animation<double> animation, Widget child) {
+      return new SlideTransition(
+          position: new Tween<Offset>(
+          begin: const Offset(1.0, 0.0),
+          end: const Offset(0.0, 0.0),
+      ).animate(animation),
+          child: child,
+      );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -24,9 +35,22 @@ class _PullbodyState extends State<Pullbody> {
             child: Ink(
               child: InkWell(
                 onTap: (){
-                  print(index);
-                  Navigator.of(context).push(
-                    new MaterialPageRoute(builder: (context) => new Details()),
+                  Navigator.push<String>(
+                    context,
+                    new PageRouteBuilder(pageBuilder: (BuildContext context,
+                        Animation<double> animation,
+                        Animation<double> secondaryAnimation) {
+                          // 跳转的路由对象
+                          return new Details();
+                    }, transitionsBuilder: (
+                      BuildContext context,
+                      Animation<double> animation,
+                      Animation<double> secondaryAnimation,
+                      Widget child,
+                    ) {
+                      return _PullbodyState
+                          .createTransition(animation, child);
+                    })
                   );
                 },
                 child:PullbodyCard(),
@@ -128,7 +152,7 @@ class PullbodyCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text('2019-01-01 19:00:00  上海',style: TextStyles.TextStyle4(),),
-                      Text('采购资源',style: TextStyles.TextStyle4(),),
+                      Text('采购资源',style: TextStyle(fontSize: 12.0,color: Color(0xFF616161),fontWeight: FontWeight.bold),),
                     ],
                   ),
                 ],

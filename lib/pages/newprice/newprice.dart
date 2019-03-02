@@ -34,9 +34,7 @@ class _NewPriceState extends State<NewPrice> {
             Interval_space(),
             Price(),
             new Divider(height: 0,),
-            Container(
-              padding: EdgeInsets.fromLTRB(0, 40, 0, 0),
-            )
+            Container(padding: EdgeInsets.fromLTRB(0, 40, 0, 0),)
           ],
         )
       ),
@@ -250,7 +248,7 @@ class _PriceState extends State<Price> {
                 ),
                 new Divider(height: 0,),
                 Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0),),
-                Text("均价(¥)走势",style: TextStyles.TextStyle3(),),
+                Text("均价走势(¥)",style: TextStyles.TextStyle3(),),
                 Container(
                   alignment: Alignment.center,
                   height: 220.0,

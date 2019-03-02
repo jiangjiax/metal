@@ -11,6 +11,7 @@ class Message extends StatefulWidget {
   }
 }
 class _MessageState extends State<Message> {
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -48,6 +49,16 @@ class Messageheader extends StatefulWidget {
   }
 }
 class _MessageheaderState extends State<Messageheader> {
+  static SlideTransition createTransition(
+    Animation<double> animation, Widget child) {
+      return new SlideTransition(
+          position: new Tween<Offset>(
+          begin: const Offset(1.0, 0.0),
+          end: const Offset(0.0, 0.0),
+      ).animate(animation),
+          child: child,
+      );
+  }
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -85,8 +96,22 @@ class _MessageheaderState extends State<Messageheader> {
                     flex: 1,
                     child:FlatButton(
                       onPressed: (){
-                        Navigator.of(context).push(
-                          new MaterialPageRoute(builder: (context) => new Deals()),
+                        Navigator.push<String>(
+                          context,
+                          new PageRouteBuilder(pageBuilder: (BuildContext context,
+                              Animation<double> animation,
+                              Animation<double> secondaryAnimation) {
+                                // 跳转的路由对象
+                                return new Deals();
+                          }, transitionsBuilder: (
+                            BuildContext context,
+                            Animation<double> animation,
+                            Animation<double> secondaryAnimation,
+                            Widget child,
+                          ) {
+                            return _MessageheaderState
+                                .createTransition(animation, child);
+                          })
                         );
                       },
                       child:Column(
@@ -131,8 +156,22 @@ class _MessageheaderState extends State<Messageheader> {
                     flex: 1,
                     child:FlatButton(
                       onPressed: (){
-                        Navigator.of(context).push(
-                          new MaterialPageRoute(builder: (context) => new System()),
+                        Navigator.push<String>(
+                          context,
+                          new PageRouteBuilder(pageBuilder: (BuildContext context,
+                              Animation<double> animation,
+                              Animation<double> secondaryAnimation) {
+                                // 跳转的路由对象
+                                return new System();
+                          }, transitionsBuilder: (
+                            BuildContext context,
+                            Animation<double> animation,
+                            Animation<double> secondaryAnimation,
+                            Widget child,
+                          ) {
+                            return _MessageheaderState
+                                .createTransition(animation, child);
+                          })
                         );
                       },
                       child:Column(

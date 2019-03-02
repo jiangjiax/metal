@@ -110,7 +110,7 @@ class _FilterbarState extends State<Filterbar> {
                     Text("筛选",style: TextStyles.TextStyle1(),),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
-                      child:Icon(Icons.select_all,color: _textColorSelect,),
+                      child:Icon(Icons.select_all,color:Colors.blue,),
                     )
                   ]
                 ),
@@ -120,11 +120,11 @@ class _FilterbarState extends State<Filterbar> {
                   widget.globals.currentState.openEndDrawer();
                 },
                 textTheme: ButtonTextTheme.accent,
-                textColor: _textColorSelect,
+                textColor: Colors.blue,
                 highlightColor: Colors.blue,
                 // 按下的背景色
                 splashColor: Colors.blue,
-                color: _backColorSelect,
+                color: Colors.white,
                 shape: BorderDirectional(
                   // top: new BorderSide(color: Color(0xFFE0E0E0),),
                   // bottom: new BorderSide(color: Color(0xFFE0E0E0),),
@@ -154,11 +154,10 @@ class _FilterbarState extends State<Filterbar> {
         _textColorNumber = GlobalButton.textColorAfter;
         _backColorNumber = GlobalButton.backColorAfter;
       }
-      if(index==4){
-        onFlatButtonHelp();
-        _textColorSelect = GlobalButton.textColorAfter;
-        _backColorSelect = GlobalButton.backColorAfter;
-      }
+      // if(index==4){
+      //   onFlatButtonHelp();
+      //   _textColorSelect = Colors.blue;
+      // }
     });
   }
   void onFlatButtonHelp() {
@@ -166,11 +165,11 @@ class _FilterbarState extends State<Filterbar> {
       _textColorEntire = GlobalButton.textColorBefore;
       _textColoNew = GlobalButton.textColorBefore;
       _textColorNumber = GlobalButton.textColorBefore;
-      _textColorSelect = GlobalButton.textColorBefore;
+      // _textColorSelect = GlobalButton.textColorBefore;
       _backColorEntire = GlobalButton.backColorBefore;
       _backColoNew = GlobalButton.backColorBefore;
       _backColorNumber = GlobalButton.backColorBefore;
-      _backColorSelect = GlobalButton.backColorBefore;
+      // _backColorSelect = GlobalButton.backColorBefore;
     });
   }
 }
