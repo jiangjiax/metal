@@ -1,5 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:metal/data/global_config.dart';
+import 'package:metal/data/global_home.dart';
+
+// Map select = new Map();
+// Map<String, String> selectTrue = new Map();
+// void sadds(index){
+//   select["$index"] = "false";
+// }
+// void saddscon(){
+//   List<Widget>.generate(
+//     homePageContent["variety"].length, (int index) {
+//       sadds(homePageContent["variety"][index]["id"].toString());
+//     }
+//   );
+// }
+// void saddSearchTrue(){
+//   int num = 0;
+  // List<Widget>.generate(
+  //   homePageContent["variety"].length, (int index) {
+  //     if (select[homePageContent["variety"][index]["id"].toString()]=="true") {
+  //       selectTrue["variety"] = homePageContent["variety"][index]["id"].toString();
+  //       num++;
+  //     }
+  //   }
+  // );
+//   if (num==0) {
+//     print(num);
+//     selectTrue = {};
+//   }
+//   print(num);
+//   print(selectTrue.toString());
+// }
+
+String _controllerPriceLows="";
+String _controllerNumberLows="";
+String _controllerPriceHighs="";
+String _controllerNumberHighs="";
+String cityCon="";
+int _value = 1;
+
+Map<String,String> drawerCon = new Map();
+Map<int,bool> drawerConCate = {0:false,1:false,2:false};
+
+Map<String,String> drawerPrice = new Map();
+
 
 class FilterDrawer extends StatefulWidget {
   FilterDrawer({Key key, this.global}) : super(key: key);
@@ -16,6 +60,74 @@ class _FilterDrawerState extends State<FilterDrawer> {
   ScrollController _controller = new ScrollController();
   bool showToTopBtn = true; //是否显示“返回到顶部”按钮
 
+  void initState() { 
+    super.initState();
+    List<Widget>.generate(
+      Drawers.Cate.length, (int index) {
+        Drawers.Cate[index].color = drawerConCate[index];
+      }
+    );
+    _controllerPriceLows =cons["price_low"]==null?"":cons["price_low"];
+    _controllerPriceHighs =cons["price_high"]==null?"":cons["price_high"];
+    _controllerNumberLows =cons["number_low"]==null?"":cons["number_low"];
+    _controllerNumberHighs =cons["number_high"]==null?"":cons["number_high"];
+  }
+
+  void conf(){
+    if(drawerCon["tid"]=="0"||drawerCon["tid"]=="1"){
+      cons["tid"] = drawerCon["tid"].toString();
+    }else{
+      cons.remove("tid");
+    }
+    List<Widget>.generate(
+      Drawers.Cate.length, (int index) {
+        drawerConCate[index] = Drawers.Cate[index].color;
+      }
+    );
+    if (_controllerPriceLows!="") {
+      cons["price_low"] = _controllerPriceLows;
+    }else{
+      cons.remove("price_low");
+    }
+    if (_controllerPriceHighs!="") {
+      cons["price_high"] = _controllerPriceHighs;
+    }else{
+      cons.remove("price_high");
+    }
+    if(cons["price_high"]!=null&&cons["price_low"]!=null){
+      if (int.parse(cons["price_low"])>int.parse(cons["price_high"])) {
+        var zancun = cons["price_low"];
+        cons["price_low"] = cons["price_high"];
+        cons["price_high"] = zancun;
+      }
+    }
+    if (_controllerNumberLows!="") {
+      cons["number_low"] = _controllerNumberLows;
+    }else{
+      cons.remove("number_low");
+    }
+    if (_controllerNumberHighs!="") {
+      cons["number_high"] = _controllerNumberHighs;
+    }else{
+      cons.remove("number_high");
+    }
+    if(cons["number_low"]!=null&&cons["number_high"]!=null){
+      if (int.parse(cons["number_low"])>int.parse(cons["number_high"])) {
+        var zancun = cons["number_low"];
+        cons["number_low"] = cons["number_high"];
+        cons["number_high"] = zancun;
+      }
+    }
+    if (cityCon!="") {
+      cons["city"] = cityCon;
+    }else{
+      cons.remove("city");
+    }
+
+    print(cons);
+
+    eventBus.fire(cons);
+  }
   @override
   Widget build(BuildContext context) {
     return new Drawer(
@@ -51,6 +163,10 @@ class _FilterDrawerState extends State<FilterDrawer> {
                       Expanded(
                         flex: 3,
                         child: TextField(
+                          controller: TextEditingController.fromValue(TextEditingValue(
+                              text: _controllerPriceLows,
+                            ),
+                          ),
                           keyboardType: TextInputType.number,
                           enabled: true,
                           decoration: const InputDecoration(
@@ -59,6 +175,10 @@ class _FilterDrawerState extends State<FilterDrawer> {
                             labelStyle: TextStyle(fontSize: 16.0),
                             border: OutlineInputBorder(),
                           ),
+                          onChanged: (text){
+                            _controllerPriceLows = text;
+                            print(text);
+                          },
                         ),
                       ),
                       Expanded(
@@ -70,6 +190,10 @@ class _FilterDrawerState extends State<FilterDrawer> {
                       Expanded(
                         flex: 3,
                         child: TextField(
+                          controller: TextEditingController.fromValue(TextEditingValue(
+                              text: _controllerPriceHighs,
+                            ),
+                          ),
                           keyboardType: TextInputType.number,
                           enabled: true,
                           decoration: const InputDecoration(
@@ -78,6 +202,10 @@ class _FilterDrawerState extends State<FilterDrawer> {
                             labelStyle: TextStyle(fontSize: 16.0),
                             border: OutlineInputBorder(),
                           ),
+                          onChanged: (text){
+                            _controllerPriceHighs = text;
+                            print(_controllerPriceHighs);
+                          },
                         ),
                       ),
                     ],
@@ -96,6 +224,10 @@ class _FilterDrawerState extends State<FilterDrawer> {
                       Expanded(
                         flex: 3,
                         child: TextField(
+                          controller: TextEditingController.fromValue(TextEditingValue(
+                              text: _controllerNumberLows,
+                            ),
+                          ),
                           keyboardType: TextInputType.number,
                           enabled: true,
                           decoration: const InputDecoration(
@@ -104,6 +236,10 @@ class _FilterDrawerState extends State<FilterDrawer> {
                             labelStyle: TextStyle(fontSize: 16.0),
                             border: OutlineInputBorder(),
                           ),
+                          onChanged: (text){
+                            _controllerNumberLows = text;
+                            print(_controllerNumberLows);
+                          },
                         ),
                       ),
                       Expanded(
@@ -115,6 +251,10 @@ class _FilterDrawerState extends State<FilterDrawer> {
                       Expanded(
                         flex: 3,
                         child: TextField(
+                          controller: TextEditingController.fromValue(TextEditingValue(
+                              text: _controllerNumberHighs,
+                            ),
+                          ),
                           keyboardType: TextInputType.number,
                           enabled: true,
                           decoration: const InputDecoration(
@@ -123,6 +263,9 @@ class _FilterDrawerState extends State<FilterDrawer> {
                             labelStyle: TextStyle(fontSize: 16.0),
                             border: OutlineInputBorder(),
                           ),
+                          onChanged: (text){
+                            _controllerNumberHighs = text;
+                          },
                         ),
                       ),
                     ],
@@ -137,7 +280,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
                 new Divider(color: Color(0xFFBDBDBD)),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 5.0),
-                  child: Text("城市",style:TextStyles.TextStyle2(),), 
+                  child: Text("热门城市",style:TextStyles.TextStyle2(),), 
                 ),
                 Wrap(
                   children: <Widget>[
@@ -160,7 +303,6 @@ class _FilterDrawerState extends State<FilterDrawer> {
                 ),
                 color: Color(0xFFE0E0E0),
                 onPressed: (){
-                  print('取消');
                   Navigator.pop(context); 
                 },
                 child: Text('取消',style: new TextStyle(fontSize: 15.0,color: Colors.black),),
@@ -172,7 +314,9 @@ class _FilterDrawerState extends State<FilterDrawer> {
                 ),
                 color: Color(0xFF64B5F6),
                 onPressed: (){
-                  print('确定');
+                  setState(() {
+                    conf();
+                  });
                   Navigator.pop(context); 
                 },
                 child: Text('确定',style: new TextStyle(fontSize: 15.0,color: Colors.black),),
@@ -191,7 +335,7 @@ class CityOptions extends StatefulWidget {
   _CityOptionsState createState() => _CityOptionsState();
 }
 class _CityOptionsState extends State<CityOptions> {
-  int _value = 1;
+  // int _value = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -199,14 +343,14 @@ class _CityOptionsState extends State<CityOptions> {
       spacing: 5,
       runSpacing: -10.0,
       children: List<Widget>.generate(
-      Drawers.City.length, (int index) {
+      homePageContent["hotCity"].length, (int index) {
       return ChoiceChip(
       //  shape: new BeveledRectangleBorder(
       //    borderRadius: BorderRadius.circular(2.0),
       //  ),
       backgroundColor: Color(0xFFEEEEEE),
         label: new Text(
-          Drawers.City[index],
+          homePageContent["hotCity"][index]["name"],
           overflow: TextOverflow.ellipsis,
         ),
         selected: _value == index,
@@ -214,6 +358,12 @@ class _CityOptionsState extends State<CityOptions> {
           setState(() {
             _value = selected ? index : null;
           });
+          if(selected==true){
+            cityCon = homePageContent["hotCity"][index]["id"];
+          }else{
+            cityCon = "";
+          }
+          print(cityCon);
         },
       );
     },).toList(),
@@ -244,16 +394,19 @@ class _CateOptionsState extends State<CateOptions> {
                   setState(() {
                     if (Drawers.Cate[index].color == true) {
                       Drawers.Cate[index].color = false;
+                      drawerCon = {};
                     } else{
                       Drawers.Cate[0].color = false;
                       Drawers.Cate[1].color = false;
                       Drawers.Cate[2].color = false;
                       Drawers.Cate[index].color = true;
+                      drawerCon["tid"] = (index-1).toString();
+                      print(index);
                     }
                   });
-                  print(Drawers.Cate[index].color);
+                  print(drawerCon);
                 },
-                child: Container(
+                child: Container( 
                   alignment: Alignment.center,
                   child:new Text(
                     Drawers.Cate[index].text,
@@ -283,6 +436,7 @@ class MetalsOptions extends StatefulWidget {
   _MetalsOptionsState createState() => _MetalsOptionsState();
 }
 class _MetalsOptionsState extends State<MetalsOptions> {
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -292,39 +446,29 @@ class _MetalsOptionsState extends State<MetalsOptions> {
           spacing: 6.0,
           runSpacing: 6.0,
           children: List<Widget>.generate(
-            metals.length, (int index) {
+            homePageContent["variety"].length, (int index) {
               return Ink(
                 width: 90.0,
                 height: 40.0,
                 child:InkWell(
                   onTap: () {
                     setState(() {
-                      if (metals[index].color == true) {
-                        metals[index].color = false;
-                      } else{
-                        if (index==0) {
-                          List<Widget>.generate(
-                            metals.length, (int index) {
-                              metals[index].color = false;
-                            }
-                          ).toList();
-                          metals[index].color = true;
-                        }else{
-                          metals[index].color = true;
-                          metals[0].color = false;
-                        }
-                      }
+                      // if (select[homePageContent["variety"][index]["id"]] == "true") {
+                      //   select[homePageContent["variety"][index]["id"]] = "false";
+                      // }else{
+                      //   select[homePageContent["variety"][index]["id"]] = "true";
+                      // }
                     });
-                    print(metals[index].color);
                   },
                   child: Container(
                     alignment: Alignment.center,
                     child:new Text(
-                      metals[index].text,
+                      homePageContent["variety"][index]["name"],
                       overflow: TextOverflow.ellipsis,
                       style:new TextStyle(
                         fontSize: 15.0,
-                        color: metals[index].color==true?Colors.blue:Colors.black,
+                        // color: select[homePageContent["variety"][index]["id"]]=="false"?Colors.black:Colors.blue,
+                        color: Colors.black,
                       )
                     ),
                     decoration: BoxDecoration(

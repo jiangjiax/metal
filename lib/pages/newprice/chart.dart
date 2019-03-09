@@ -95,7 +95,7 @@ class OrdinalComboBarLineChart extends StatelessWidget {
     return [
       new charts.Series<OrdinalSales, String>(
           id: 'Mobile',
-          colorFn: (_, __) => charts.MaterialPalette.green.shadeDefault,
+          colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
           domainFn: (OrdinalSales sales, _) => sales.year,
           measureFn: (OrdinalSales sales, _) => sales.sales,
           data: mobileSalesData)

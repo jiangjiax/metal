@@ -3,6 +3,7 @@ import 'package:metal/pages/home/swiper.dart';
 import 'package:metal/pages/home/filterbar.dart';
 import 'package:metal/pages/home/images.dart';
 import 'package:metal/pages/home/pullbody.dart';
+import 'package:metal/data/global_home.dart';
 
 class HomePages extends StatefulWidget {
   HomePages({Key key, this.global}) : super(key: key);
@@ -32,6 +33,7 @@ class _HomePagesState extends State<HomePages> {
       }
     });
   }
+
   @override
   void dispose() {
     //为了避免内存泄露，需要调用_controller.dispose
@@ -55,6 +57,8 @@ class _HomePagesState extends State<HomePages> {
                 Filterbar(globals: this.widget.global),
                 new Divider(height: 0,color: Color(0xFFBDBDBD),),
                 Pullbody(),
+                new Divider(height: 0),
+                Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 70),)
               ]),
             )
           ],

@@ -711,7 +711,6 @@ class  RecephighState extends State <Recephigh> {
             color:Colors.pink,
             child: Row(
               children: <Widget>[
-
               ],
             )
           )

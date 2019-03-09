@@ -44,7 +44,7 @@ class _SearchAfterState extends State<SearchAfter> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _globalKey,
-      endDrawer: FilterDrawer(global: _globalKey),
+      endDrawer: FilterDrawer(),
       appBar: new AppBar(
         flexibleSpace: Container(
           decoration: BoxDecoration(

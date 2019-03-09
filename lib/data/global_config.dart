@@ -348,3 +348,12 @@ class GlobalList {
       }
     );
   }
+
+//地址
+String localhigh="";
+String local="";
+String localcity="";
+String localarea="";
+String localid="";
+String localcityid="";
+String localareaid="";

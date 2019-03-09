@@ -1,7 +1,7 @@
   import 'package:flutter/material.dart';
   import 'package:metal/index.dart';
   import 'package:metal/pages/search/search.dart';
-  import 'package:metal/pages/add/add.dart';
+
   import 'package:metal/pages/my/login.dart';
   import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -24,9 +24,11 @@
         debugShowCheckedModeBanner: false,
         routes: <String, WidgetBuilder> {
           '/search': (_) => new SearchPage(),
-          '/go': (_) => new Add(),
           '/logingo': (_) => new LoginPage(),
           '/logins': (_) => new LoginsPage(),
+          '/loginyzm': (_) => new LoginyzmPage(),
+          '/loginpassword': (_) => new Passwordlogin(),
+          '/index': (_) => new Navigatorpage(),
         },
         title: 'Flutter Demo',
         home: Navigatorpage(),

@@ -1,38 +1,127 @@
 import 'package:flutter/material.dart';
-import 'package:metal/pages/home/swiper.dart';
 import 'package:metal/data/global_config.dart';
 import 'dart:async';
 import 'package:metal/pages/message/chat.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:metal/data/global_home.dart';
+import 'package:fluwx/fluwx.dart' as fluwx;
 
-bool type = true;
+bool type = false;
+bool typeoffer = false;
+var varietys = "";
 
 class Details extends StatefulWidget {
+  Details({Key key, this.index}) : super(key: key);
+  final int index;
+
   @override
   _DetailsState createState() {
     return _DetailsState();
   }
 }
 class _DetailsState extends State<Details> {
+  fluwx.WeChatScene scene = fluwx.WeChatScene.SESSION;
+  String _result = "无";
+  _initFluwx() async{
+    await fluwx.register(appId: "wxf0d41be8d1e4189a", doOnAndroid: true, doOnIOS: true, enableMTA: false);
+    var result = await fluwx.isWeChatInstalled();
+    print("is installed $result");
+  }
+  void initState() { 
+    super.initState();
+    setState(() {
+      cons["pid"] = "2";
+      print(cons);
+      if (homePageContent["list"][this.widget.index]["tid"]=="1") {
+        type=true;
+      }else{
+        type=false;
+      }
+      if (homePageContent["offer"]!=null) {
+        typeoffer=true;
+      }else{
+        typeoffer=false;
+      }
+    });
+    _initFluwx();
+    fluwx.responseFromAuth.listen((data) {
+      setState(() {
+        _result = "${data.errCode}";
+      });
+    });
+    List<Widget>.generate(
+      homePageContent["variety"].length, (int index) {
+        if(homePageContent["variety"][index]["id"]==homePageContent["list"][this.widget.index]["variety"]){
+          varietys = homePageContent["variety"][index]["name"];
+        }
+      }
+    );
+  }
+
+  String _text = "share text from fluwx";
+  void _shareText() {
+    fluwx
+        .share(fluwx.WeChatShareTextModel(
+            text: _text,
+            transaction: "text${DateTime.now().millisecondsSinceEpoch}",
+            scene: scene))
+        .then((data) {
+      print(data);
+    });
+
+//    fluwx.sendAuth(WeChatSendAuthModel(scope: "snsapi_userinfo",state: "wechat_sdk_demo_test"));
+  }
+
+  void handleRadioValueChanged(fluwx.WeChatScene scene) {
+    setState(() {
+      this.scene = scene;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: new AppBar(     
+      appBar: new AppBar(
+        elevation: 0.0,     
         title: new Text('需求详情'),
         actions: <Widget>[
-          new IconButton(icon: new Icon(Icons.share), onPressed:(){}),
+          new IconButton(icon: new Icon(Icons.share), onPressed:(){
+            fluwx.share(fluwx.WeChatShareTextModel(
+                text: "text from fluwx",
+                transaction: "transaction}",//仅在android上有效，下同。
+                scene: scene
+              ));
+          }),
         ],
       ),
       body: Container(
         color: Color(0xFFEEEEEE),
         child:ListView(
           children: <Widget>[
-            SwiperPages(),
-            Detailsheader(),
+            SwiperPages(index: this.widget.index,),
+            Detailsheader(index: this.widget.index,),
             Interval_space(),
-            DetailsMore(),
-            type?DetailsTable():Container(),
+            DetailsMore(index: this.widget.index,),
+            Interval_space(),
+            DetailsMoreTwo(index: this.widget.index,),
+            typeoffer?
+            new FutureBuilder(
+              future: getHomePageContent(urls,cons),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return DetailsTable();
+                } else if (snapshot.hasError) {
+                  return new Text("${snapshot.error}");
+                }
+
+                // By default, show a loading spinner
+                return new Center(
+                  child:CircularProgressIndicator()
+                );
+              }
+            )
+            :Container(),
           ],
         )
       ),
@@ -208,10 +297,9 @@ class SellButton extends StatelessWidget {
         color: Colors.blue,
         child: Container(
           padding: const EdgeInsets.fromLTRB(15.0, 12.0, 15.0, 12.0),
-          child: Text("平台下单",style: new TextStyle(fontSize: 18.0,color: Colors.white),),
+          child: Text("下单",style: new TextStyle(fontSize: 18.0,color: Colors.white),),
         ),
         onPressed: () {
-          print('平台下单');
           Future(() => showModalBottomSheet(
             context: context,
             builder: (context) {
@@ -245,6 +333,9 @@ with SingleTickerProviderStateMixin {
 }
 
 class Detailsheader extends StatefulWidget {
+  Detailsheader({Key key, this.index}) : super(key: key);
+  final int index;
+
   @override
   _DetailsheaderState createState() {
     return _DetailsheaderState();
@@ -266,7 +357,7 @@ class _DetailsheaderState extends State<Detailsheader> {
                 direction: Axis.horizontal,
                 children: <Widget>[
                   Text(
-                    '眼镜厂废料眼镜厂废料眼镜厂废料眼镜厂废料眼镜厂废料眼镜厂废料',
+                    homePageContent["list"][this.widget.index]["title"].toString(),
                     style: new TextStyle(fontSize: 18.0,fontWeight: FontWeight.bold),
                     overflow: TextOverflow.ellipsis,
                     softWrap: true,
@@ -280,7 +371,13 @@ class _DetailsheaderState extends State<Detailsheader> {
             children: <Widget>[
               Container(
                 padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
-                child: Text("¥ 300.0万元/吨",style: new TextStyle(fontSize: 15.0,fontWeight: FontWeight.bold,color: Colors.red),),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    // Text('意向价格',style: TextStyles.TextStyle4(),),
+                    Text("¥ ${homePageContent["list"][this.widget.index]["price"].toString()}元/吨",style: new TextStyle(fontSize: 15.0,fontWeight: FontWeight.bold,color: Colors.red),),
+                  ],
+                ),
               ),
               type?Buy():Sell(),
             ],
@@ -297,23 +394,23 @@ class _DetailsheaderState extends State<Detailsheader> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
                         Icon(Icons.people,color: Color(0xFF616161),size: 15.0,),
-                        Text(' 浏览: 1000',style: TextStyles.TextStyle4(),)
+                        Text(' 浏览: ${homePageContent["list"][this.widget.index]["click"]}',style: TextStyles.TextStyle4(),)
                       ],
                     ),
                   )
                 ),
-                Expanded(
-                  flex: 1,
-                  child: Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Icon(Icons.location_on,color: Color(0xFF616161),size: 15.0,),
-                        Text(' 浙江 台州',style: TextStyles.TextStyle4(),)
-                      ],
-                    ),
-                  )
-                ),
+                // Expanded(
+                //   flex: 1,
+                //   child: Container(
+                //     child: Row(
+                //       mainAxisAlignment: MainAxisAlignment.center,
+                //       children: <Widget>[
+                //         Icon(Icons.location_on,color: Color(0xFF616161),size: 15.0,),
+                //         Text(' ${homePageContent["list"][this.widget.index]["province"].toString()} ${homePageContent["list"][this.widget.index]["city"].toString()}',style: TextStyles.TextStyle4(),)
+                //       ],
+                //     ),
+                //   )
+                // ),
                 Expanded(
                   flex: 1,
                   child: Container(
@@ -321,7 +418,7 @@ class _DetailsheaderState extends State<Detailsheader> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
                         Icon(Icons.timelapse,color: Color(0xFF616161),size: 15.0,),
-                        Text(' 2019-2-23',style: TextStyles.TextStyle4(),)
+                        Text(' ${homePageContent["list"][this.widget.index]["atime"].toString()}',style: TextStyles.TextStyle4(),)
                       ],
                     ),
                   )
@@ -362,7 +459,92 @@ class Sell extends StatelessWidget {
   }
 }
 
+class DetailsMoreTwo extends StatefulWidget {
+  DetailsMoreTwo({Key key, this.index}) : super(key: key);
+  final int index;
+
+  @override
+  _DetailsMoreTwoState createState() {
+    return _DetailsMoreTwoState();
+  }
+}
+class _DetailsMoreTwoState extends State<DetailsMoreTwo> {
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color:Colors.white,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Container(
+            height: 25.0,
+            child: Row(
+              children: <Widget>[
+                Container(color:Colors.blue,width: 4.0,),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(4.0, 0.0, 0.0, 0.0),
+                  child: Text('产品详情',style: TextStyles.TextStyle2(),),
+                ),
+              ],
+            ),
+          ),
+          new Divider(height: 0,),
+          Container(
+            padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 10.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0,10.0),
+                  child:Wrap(
+                    direction: Axis.horizontal,
+                    children: <Widget>[
+                      Text(
+                        // homePageContent["list"][this.widget.index].toString(),
+                        homePageContent["list"][this.widget.index]["content_word"]==null?"":homePageContent["list"][this.widget.index]["content_word"],
+                        style: new TextStyle(fontSize: 15.0,color: Color(0XFF424242)),
+                        overflow:TextOverflow.ellipsis,
+                        maxLines: 3,
+                      ),
+                      // Text(
+                      //   homePageContent["list"][this.widget.index]["click"].toString(),
+                      //   // homePageContent["list"][this.widget.index]["content_word"]==null?"":homePageContent["list"][this.widget.index]["content_word"],
+                      //   style: new TextStyle(fontSize: 15.0,color: Color(0XFF424242)),
+                      //   // overflow:TextOverflow.ellipsis,
+                      //   // maxLines: 3,
+                      // ),
+                    ],
+                  )
+                ),
+                homePageContent["list"][this.widget.index]["content_word"]!=null?new Divider(height: 0,color: Color(0xFFBDBDBD),):new Container(),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
+                  child:Wrap(
+                    direction: Axis.horizontal,
+                    children: List<Widget>.generate(
+                      homePageContent["list"][this.widget.index]["content_img"]==null?0:homePageContent["list"][this.widget.index]["content_img"].length
+                      , (int index) {
+                      return Image.network(
+                        "$urler${homePageContent["list"][this.widget.index]["content_img"][index]["pathname"].toString()}",
+                      );
+                      },
+                    ).toList(),
+                  )
+                ),
+              ],
+            )
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class DetailsMore extends StatefulWidget {
+  DetailsMore({Key key, this.index}) : super(key: key);
+  final int index;
+
   @override
   _DetailsMoreState createState() {
     return _DetailsMoreState();
@@ -384,7 +566,7 @@ class _DetailsMoreState extends State<DetailsMore> {
                 Container(color:Colors.blue,width: 4.0,),
                 Container(
                   padding: const EdgeInsets.fromLTRB(4.0, 0.0, 0.0, 0.0),
-                  child: Text('详细说明',style: TextStyles.TextStyle2(),),
+                  child: Text('产品说明',style: TextStyles.TextStyle2(),),
                 ),
               ],
             ),
@@ -400,7 +582,7 @@ class _DetailsMoreState extends State<DetailsMore> {
                   direction: Axis.horizontal,
                     children: <Widget>[
                         Text(
-                        '眼镜厂废料眼镜厂废料眼镜厂废料眼镜厂废料眼镜厂废料眼镜厂废料',
+                        homePageContent["list"][this.widget.index]["title"].toString(),
                         style: TextStyles.TextStyle1(),
                         overflow: TextOverflow.ellipsis,
                         softWrap: true,
@@ -423,7 +605,67 @@ class _DetailsMoreState extends State<DetailsMore> {
                       Expanded(
                         flex: 8,
                         child: Container(
-                          child: Text('不锈钢类',style: new TextStyle(fontSize: 15.0,color: Colors.black),overflow:TextOverflow.ellipsis,),
+                          child: Text(varietys,style: new TextStyle(fontSize: 15.0,color: Colors.black),overflow:TextOverflow.ellipsis,),
+                        )
+                      ),
+                    ],  
+                  )
+                ),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
+                  child:Flex(
+                    direction: Axis.horizontal,
+                    children: <Widget>[
+                      Expanded(
+                        flex: 2,
+                        child: Container(
+                          child: Text('品名: ',style: new TextStyle(fontSize: 15.0,color: Colors.black,)),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 8,
+                        child: Container(
+                          child: Text(homePageContent["list"][this.widget.index]["name"],style: new TextStyle(fontSize: 15.0,color: Colors.black),overflow:TextOverflow.ellipsis,),
+                        )
+                      ),
+                    ],  
+                  )
+                ),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
+                  child:Flex(
+                    direction: Axis.horizontal,
+                    children: <Widget>[
+                      Expanded(
+                        flex: 2,
+                        child: Container(
+                          child: Text('品种: ',style: new TextStyle(fontSize: 15.0,color: Colors.black,)),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 8,
+                        child: Container(
+                          child: Text(homePageContent["list"][this.widget.index]["ore"],style: new TextStyle(fontSize: 15.0,color: Colors.black),overflow:TextOverflow.ellipsis,),
+                        )
+                      ),
+                    ],  
+                  )
+                ),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
+                  child:Flex(
+                    direction: Axis.horizontal,
+                    children: <Widget>[
+                      Expanded(
+                        flex: 2,
+                        child: Container(
+                          child: Text('参考价格: ',style: new TextStyle(fontSize: 15.0,color: Colors.black,)),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 8,
+                        child: Container(
+                          child: Text("¥100元/吨",style: new TextStyle(fontSize: 15.0,color: Colors.red),overflow:TextOverflow.ellipsis,),
                         )
                       ),
                     ],  
@@ -443,12 +685,32 @@ class _DetailsMoreState extends State<DetailsMore> {
                       Expanded(
                         flex: 8,
                         child: Container(
-                          child: Text('20吨',style: new TextStyle(fontSize: 15.0,color: Colors.black),overflow:TextOverflow.ellipsis,),
+                          child: Text('${homePageContent["list"][this.widget.index]["number"]}${homePageContent["list"][this.widget.index]["unit"]}',style: new TextStyle(fontSize: 15.0,color: Colors.black),overflow:TextOverflow.ellipsis,),
                         )
                       ),
                     ],  
                   )
                 ),
+                type?Container(
+                  padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
+                  child:Flex(
+                    direction: Axis.horizontal,
+                    children: <Widget>[
+                      Expanded(
+                        flex: 2,
+                        child: Container(
+                          child: Text('截止时间: ',style: new TextStyle(fontSize: 15.0,color: Colors.black,)),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 8,
+                        child: Container(
+                          child: Text(homePageContent["list"][this.widget.index]["etime"],style: new TextStyle(fontSize: 15.0,color: Colors.black),overflow:TextOverflow.ellipsis,),
+                        )
+                      ),
+                    ],  
+                  )
+                ):Container(),
                 Container(
                   padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
                   child:Flex(
@@ -457,20 +719,20 @@ class _DetailsMoreState extends State<DetailsMore> {
                       Expanded(
                         flex: 2,
                         child: Container(
-                          child: Text('截至时间: ',style: new TextStyle(fontSize: 15.0,color: Colors.black,)),
+                          child: Text('发布时间: ',style: new TextStyle(fontSize: 15.0,color: Colors.black,)),
                         ),
                       ),
                       Expanded(
                         flex: 8,
                         child: Container(
-                          child: Text('2019-10-25',style: new TextStyle(fontSize: 15.0,color: Colors.black),overflow:TextOverflow.ellipsis,),
+                          child: Text(homePageContent["list"][this.widget.index]["atime"],style: new TextStyle(fontSize: 15.0,color: Colors.black),overflow:TextOverflow.ellipsis,),
                         )
                       ),
                     ],  
                   )
                 ),
                 Container(
-                  padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
+                  padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 5.0),
                   child:Flex(
                     direction: Axis.horizontal,
                     children: <Widget>[
@@ -483,46 +745,10 @@ class _DetailsMoreState extends State<DetailsMore> {
                       Expanded(
                         flex: 8,
                         child: Container(
-                          child: Text('浙江省 宁波市',style: new TextStyle(fontSize: 15.0,color: Colors.black),overflow:TextOverflow.ellipsis,),
+                          child: Text('${homePageContent["list"][this.widget.index]["province"]} ${homePageContent["list"][this.widget.index]["city"]}',style: new TextStyle(fontSize: 15.0,color: Colors.black),overflow:TextOverflow.ellipsis,),
                         )
                       ),
                     ],  
-                  )
-                ),
-                Container(
-                  padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 10.0),
-                  child:Flex(
-                    direction: Axis.horizontal,
-                    children: <Widget>[
-                      Expanded(
-                        flex: 2,
-                        child: Container(
-                          child: Text('资源性质: ',style: new TextStyle(fontSize: 15.0,color: Colors.black,)),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 8,
-                        child: Container(
-                          child: Text('回收商废料',style: new TextStyle(fontSize: 15.0,color: Colors.black),overflow:TextOverflow.ellipsis,),
-                        )
-                      ),
-                    ],  
-                  )
-                ),
-                new Divider(height: 0,color: Color(0xFFBDBDBD),),
-                Container(
-                  padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
-                  child:Wrap(
-                    direction: Axis.horizontal,
-                    children: <Widget>[
-                      // Text('资源描述: ',style: new TextStyle(fontSize: 15.0,color: Colors.black)),
-                      Text(
-                        '眼镜厂废料，长期有效，属于企业废料，紧急处理，现货资源。',
-                        style: new TextStyle(fontSize: 15.0,color: Color(0XFF424242)),
-                        overflow:TextOverflow.ellipsis,
-                        maxLines: 3,
-                      ),
-                    ],
                   )
                 ),
               ],
@@ -541,7 +767,6 @@ class DetailsTable extends StatefulWidget {
   }
 }
 class _DetailsTableState extends State<DetailsTable> {
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -564,14 +789,52 @@ class _DetailsTableState extends State<DetailsTable> {
           ),
           new Divider(height: 0,),
           Container(
-            padding: const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 10.0),
+            alignment: Alignment.topLeft,
+            padding: const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 0.0),
+            child: Flex(
+              direction: Axis.horizontal,
+              children: <Widget>[
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    padding: const EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
+                    child: Text('名字',style: new TextStyle(fontSize: 15.0,fontWeight: FontWeight.bold),),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    padding: const EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
+                    child: Text('报价',style: new TextStyle(fontSize: 15.0,fontWeight: FontWeight.bold),),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    padding: const EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
+                    child: Text('库存',style: new TextStyle(fontSize: 15.0,fontWeight: FontWeight.bold),),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    padding: const EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
+                    child: Text('报价日期',style: new TextStyle(fontSize: 15.0,fontWeight: FontWeight.bold),),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          new Divider(height: 0,),
+          Container(
+            padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 10.0),
             width: MediaQuery.of(context).size.width,
             child:Table(
               columnWidths: const <int, TableColumnWidth>{
-                0: FixedColumnWidth(50.0),
-                1: FixedColumnWidth(50.0),
-                2: FixedColumnWidth(30.0),
-                3: FixedColumnWidth(35.0),
+                0: FixedColumnWidth(10.0),
+                1: FixedColumnWidth(10.0),
+                2: FixedColumnWidth(10.0),
+                3: FixedColumnWidth(10.0),
               },
               defaultVerticalAlignment: TableCellVerticalAlignment.middle,
               border: TableBorder.symmetric(
@@ -580,108 +843,30 @@ class _DetailsTableState extends State<DetailsTable> {
                   width: 1.0,
                 )
               ),
-              children: [
-                TableRow(
-                  children: <Widget>[
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
-                      child: Text('名字',style: new TextStyle(fontSize: 15.0,fontWeight: FontWeight.bold),),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
-                      child: Text('报价',style: new TextStyle(fontSize: 15.0,fontWeight: FontWeight.bold),),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
-                      child: Text('库存',style: new TextStyle(fontSize: 15.0,fontWeight: FontWeight.bold),),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
-                      child: Text('报价日期',style: new TextStyle(fontSize: 15.0,fontWeight: FontWeight.bold),),
-                    ),
-                  ],
-                ),
-                TableRow(
-                  children: <Widget>[
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
-                      child: Text('蒋先生',style: new TextStyle(fontSize: 14.0),),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
-                      child: Text('1000元/吨',style: new TextStyle(fontSize: 14.0),),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
-                      child: Text('100吨',style: new TextStyle(fontSize: 14.0),),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
-                      child: Text('2019-2-28',style: new TextStyle(fontSize: 14.0),),
-                    ),
-                  ],
-                ),
-                TableRow(
-                  children: <Widget>[
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
-                      child: Text('眼镜片人眼镜片人眼镜片人眼镜片人眼镜片人',style: new TextStyle(fontSize: 14.0),),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
-                      child: Text('999999元/吨',style: new TextStyle(fontSize: 14.0),),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
-                      child: Text('10吨',style: new TextStyle(fontSize: 14.0),),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
-                      child: Text('2019-2-28',style: new TextStyle(fontSize: 14.0),),
-                    ),
-                  ],
-                ),
-                TableRow(
-                  children: <Widget>[
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
-                      child: Text('牛肉面',style: new TextStyle(fontSize: 14.0),),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
-                      child: Text('10000元/吨',style: new TextStyle(fontSize: 14.0),),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
-                      child: Text('100吨',style: new TextStyle(fontSize: 14.0),),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
-                      child: Text('2019-12-29',style: new TextStyle(fontSize: 14.0),),
-                    ),
-                  ],
-                ),
-                TableRow(
-                  children: <Widget>[
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
-                      child: Text('Blue',style: new TextStyle(fontSize: 14.0),),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
-                      child: Text('1000元/吨',style: new TextStyle(fontSize: 14.0),),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
-                      child: Text('100000吨',style: new TextStyle(fontSize: 14.0),),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
-                      child: Text('2019-2-29',style: new TextStyle(fontSize: 14.0),),
-                    ),
-                  ],
-                ),
-              ],
+              children: List<TableRow>.generate(
+                homePageContent["offer"]==null?0:homePageContent["offer"].length, (int index) {
+                  return TableRow(
+                    children: <Widget>[
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(1.0, 5.0, 5.0, 1.0),
+                        child: Text(homePageContent["offer"][index]["name"],style: new TextStyle(fontSize: 14.0),),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(1.0, 5.0, 5.0, 1.0),
+                        child: Text('${homePageContent["offer"][index]["price"]}元/${homePageContent["offer"][index]["unit"]}',style: new TextStyle(fontSize: 14.0),),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(1.0, 5.0, 5.0, 1.0),
+                        child: Text('${homePageContent["offer"][index]["number"]}${homePageContent["offer"][index]["unit"]}',style: new TextStyle(fontSize: 14.0),),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(1.0, 5.0, 5.0, 1.0),
+                        child: Text(homePageContent["offer"][index]["atime"],style: new TextStyle(fontSize: 14.0),),
+                      ),
+                    ],
+                  );
+                },
+              ).toList(),
             ),
           ),
           new Divider(height: 0,),
@@ -847,6 +1032,51 @@ class _DBodyState extends State<DBody> {
           )
         ]
       )
+    );
+  }
+}
+
+class SwiperPages extends StatefulWidget {
+  SwiperPages({Key key, this.index}) : super(key: key);
+  final int index;
+
+  @override
+  SwiperPagesState createState() {
+    return SwiperPagesState();
+  }
+}
+
+class SwiperPagesState extends State<SwiperPages> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: 200.0,
+      child: new Swiper(
+        itemCount: homePageContent["list"][this.widget.index]["imgs"].length,
+        // viewportFraction: 0.8,
+        // scale: 0.9,
+        autoplay: true,
+        loop:true,
+        duration: 1000,
+        autoplayDelay: 10000,
+        // control: new SwiperControl(),
+        onTap: (index) => print('点击了第$index个'),
+        pagination: new SwiperPagination(
+            margin: new EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 20.0),
+            builder: new DotSwiperPaginationBuilder(
+                color: Colors.white30,
+                activeColor: Colors.white,
+                size: 10.0,
+                activeSize: 8.0)
+        ),
+        itemBuilder: (BuildContext context, int index) {
+          return new Image.network(
+            "$urler${homePageContent["list"][this.widget.index]["imgs"][index]["pathname"].toString()}",
+            fit: BoxFit.fill,
+          );
+        },
+      ),
     );
   }
 }

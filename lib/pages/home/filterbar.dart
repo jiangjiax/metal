@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:metal/data/global_config.dart';
+import 'package:metal/data/global_home.dart';
 
 class Filterbar extends StatefulWidget {
   Filterbar({Key key, this.globals}) : super(key: key);
@@ -36,7 +37,8 @@ class _FilterbarState extends State<Filterbar> {
                 child: Text("综合",style: TextStyles.TextStyle1(),),
                 onPressed: () {
                   onFlatButton(1,context);
-                  print('综合');
+                  eventBus.fire(cons);
+                  cons.remove("sort");
                 },
                 textTheme: ButtonTextTheme.accent,
                 textColor: _textColorEntire,
@@ -59,7 +61,9 @@ class _FilterbarState extends State<Filterbar> {
                 child: Text("最新",style: TextStyles.TextStyle1(),),
                 onPressed: () {
                   onFlatButton(2,context);
-                  print('最新');
+                  cons["sort"] = "1";
+                  eventBus.fire(cons);
+                  print(cons);
                 },
                 textTheme: ButtonTextTheme.accent,
                 textColor: _textColoNew,
@@ -83,8 +87,10 @@ class _FilterbarState extends State<Filterbar> {
               child: new FlatButton(
                 child: Text("最热",style: TextStyles.TextStyle1(),),
                 onPressed: () {
+                  cons["sort"] = "2";
+                  print(cons);
+                  eventBus.fire(cons);
                   onFlatButton(3,context);
-                  print('最热');
                 },
                 textTheme: ButtonTextTheme.accent,
                 textColor: _textColorNumber,
@@ -116,8 +122,7 @@ class _FilterbarState extends State<Filterbar> {
                 ),
                 onPressed: () {
                   onFlatButton(4,context);
-                  print('筛选');
-                  widget.globals.currentState.openEndDrawer();
+                  this.widget.globals.currentState.openEndDrawer();
                 },
                 textTheme: ButtonTextTheme.accent,
                 textColor: Colors.blue,

@@ -1,6 +1,6 @@
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter/material.dart';
-import 'package:metal/data/global_config.dart';
+import 'package:metal/data/global_home.dart';
 
 class SwiperPage extends StatefulWidget {
   @override
@@ -16,8 +16,22 @@ class SwiperPageState extends State<SwiperPage> {
       clipper: BottomClipperTest(),
       child: Container(
 //        color:Colors.green,
-        height: 190.0,
-        child: SwiperPages(),
+      height: 190.0,
+      child:new FutureBuilder(
+          future: getHomePageContent(urls,cons),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return SwiperPages();
+            } else if (snapshot.hasError) {
+              return new Text("${snapshot.error}");
+            }
+
+            // By default, show a loading spinner
+            return new Center(
+              child:CircularProgressIndicator()
+            );
+          }
+        )
       ),
     );
   }
@@ -53,11 +67,10 @@ class SwiperPagesState extends State<SwiperPages> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
       width: MediaQuery.of(context).size.width,
       height: 200.0,
       child: new Swiper(
-        itemCount: GlobalSwiper.images.length,
+        itemCount: homePageContent["ad"].length,
         // viewportFraction: 0.8,
         // scale: 0.9,
         autoplay: true,
@@ -75,8 +88,8 @@ class SwiperPagesState extends State<SwiperPages> {
                 activeSize: 8.0)
         ),
         itemBuilder: (BuildContext context, int index) {
-          return new Image.asset(
-            GlobalSwiper.images[index],
+          return new Image.network(
+            "$urler${homePageContent["ad"][index]["pathname"].toString()}",
             fit: BoxFit.fill,
           );
         },

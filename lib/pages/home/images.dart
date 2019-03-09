@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:metal/data/global_config.dart';
+import 'package:metal/data/global_home.dart';
 import 'package:metal/pages/search/searchafter.dart';
+import 'package:metal/pages/home/home.dart';
 
 class Images extends StatefulWidget {
   Images({Key key, this.globals}) : super(key: key);
@@ -49,12 +51,6 @@ class _ImagesState extends State<Images> {
                             fit: BoxFit.fill,
                           ),
                           onPressed: (){
-                            Navigator.push( 
-                              context,
-                              new MaterialPageRoute(builder: (context) {
-                                return new SearchAfter(search:metals[index].text);
-                              })
-                            );
                           },
                         ),
                       ),

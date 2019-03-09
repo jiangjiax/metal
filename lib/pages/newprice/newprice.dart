@@ -13,16 +13,16 @@ class _NewPriceState extends State<NewPrice> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Color(0xFF64B5F6),
-                Color(0xFF1976D2),
-              ],
-            ),
-          ),
-        ),   
+        // flexibleSpace: Container(
+        //   decoration: BoxDecoration(
+        //     gradient: LinearGradient(
+        //       colors: [
+        //         Color(0xFF64B5F6),
+        //         Color(0xFF1976D2),
+        //       ],
+        //     ),
+        //   ),
+        // ),   
         elevation: 0.0,
         title: new Text('行情'),
       ),
@@ -150,7 +150,7 @@ class Price extends StatefulWidget {
   }
 }
 class _PriceState extends State<Price> {
-
+  bool yj = true;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -247,19 +247,43 @@ class _PriceState extends State<Price> {
                   )
                 ),
                 new Divider(height: 0,),
-                Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0),),
-                Text("均价走势(¥)",style: TextStyles.TextStyle3(),),
                 Container(
+                  padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      new OutlineButton(
+                        onPressed: (){
+                          setState(() {
+                            yj?yj=false:yj=true;
+                          });
+                        },
+                        child: Text("均价走势(¥)"),
+                        textColor: yj?Colors.blue:Colors.black,
+                      ),
+                      Padding(padding: EdgeInsets.fromLTRB(1, 0, 0, 0),),
+                      new OutlineButton(
+                        onPressed: (){
+                          setState(() {
+                            yj?yj=false:yj=true;
+                          });
+                        },
+                        child: Text("月成交量(¥)"),
+                        textColor: yj?Colors.black:Colors.blue,
+                      )
+                    ],
+                  ),
+                ),
+                // Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 0),),
+                yj?Container(
+                  padding: EdgeInsets.fromLTRB(0, 0, 0, 15),
                   alignment: Alignment.center,
                   height: 220.0,
                   child:new OrdinalComboBarLineChart.withSampleData()
-                ),
-                Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0),),
-                new Divider(height: 0,),
-                Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0),),
-                Text("月成交量(¥)",style: TextStyles.TextStyle3(),),
+                ):
+                // Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0),),
                 Container(
-                  // color: Colors.blue,
+                  padding: EdgeInsets.fromLTRB(0, 0, 0, 15),
                   alignment: Alignment.center,
                   height: 220.0,
                   child:new HorizontalBarLabelChart.withSampleData()
