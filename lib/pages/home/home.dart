@@ -3,7 +3,6 @@ import 'package:metal/pages/home/swiper.dart';
 import 'package:metal/pages/home/filterbar.dart';
 import 'package:metal/pages/home/images.dart';
 import 'package:metal/pages/home/pullbody.dart';
-import 'package:metal/data/global_home.dart';
 
 class HomePages extends StatefulWidget {
   HomePages({Key key, this.global}) : super(key: key);
@@ -80,30 +79,6 @@ class _HomePagesState extends State<HomePages> {
   }
 }
 
-Widget HomeAppbar() {
-  return new AppBar(
-    elevation: 0.0,
-    // flexibleSpace: Container(
-    //   decoration: BoxDecoration(
-    //     gradient: LinearGradient(
-    //       colors: [
-    //         Color(0xFF64B5F6),
-    //         Color(0xFF1976D2),
-    //       ],
-    //     ),
-    //   ),
-    // ),   
-    titleSpacing:10.0,
-    leading: new IconButton(
-      icon: new Image.asset(
-        "images/logo.png",
-        fit: BoxFit.fill,
-      ),
-      onPressed: () {},
-    ),
-    title:BarSearch(value:"搜索金属"),
-  );
-}
 //搜索条
 class BarSearch extends StatefulWidget{
   BarSearch({Key key, this.value}) : super(key: key);

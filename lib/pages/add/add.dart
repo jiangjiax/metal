@@ -65,17 +65,7 @@ class _AddState extends State<Add> {
             onPressed: (){
               Navigator.of(context).pop();
             },
-          ),
-          flexibleSpace: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Color(0xFF64B5F6),
-                  Color(0xFF1976D2),
-                ],
-              ),
-            ),
-          ),          
+          ),       
           elevation: 0.0,
           title: Text('发布需求'),
           bottom: new TabBar(
@@ -122,10 +112,10 @@ class _AddState extends State<Add> {
           ]
         ),
         bottomNavigationBar: Container(
-          color: Colors.blue,
+          color: Color(0xFF245399),
           height: 50,
           child:Material(
-            color: Colors.blue,
+            color: Color(0xFF245399),
             child: Ink(
               child:InkWell(
                 onTap: (){
@@ -307,7 +297,7 @@ class _AddBodyState extends State<AddBody> {
                 height: 25.0,
                 child: Row(
                   children: <Widget>[
-                    Container(color:Colors.blue,width: 4.0,),
+                    Container(color:Color(0xFF245399),width: 4.0,),
                     Container(
                       padding: const EdgeInsets.fromLTRB(4.0, 0.0, 0.0, 0.0),
                       child: Text('选择品种',style: TextStyles.TextStyle2(),),
@@ -339,7 +329,7 @@ class _AddBodyState extends State<AddBody> {
                 height: 25.0,
                 child: Row(
                   children: <Widget>[
-                    Container(color:Colors.blue,width: 4.0,),
+                    Container(color:Color(0xFF245399),width: 4.0,),
                     Container(
                       padding: const EdgeInsets.fromLTRB(4.0, 0.0, 0.0, 0.0),
                       child: Text('填写供应资源需求表格',style: TextStyles.TextStyle2(),),
@@ -356,7 +346,7 @@ class _AddBodyState extends State<AddBody> {
                       child: TextField(
                         keyboardType: TextInputType.text,
                         decoration: const InputDecoration(
-                          prefixIcon:Icon(Icons.title),
+                          prefixIcon:Icon(Icons.title,color: Color(0xFFE0E0E0),),
                           labelText: '发布标题',
                           labelStyle: TextStyle(fontSize: 15.0),
                           border: InputBorder.none,
@@ -383,7 +373,7 @@ class _AddBodyState extends State<AddBody> {
                                 });
                               },
                               decoration: const InputDecoration(
-                                prefixIcon:Icon(Icons.inbox),
+                                prefixIcon:Icon(IconData(0xe88f,fontFamily: "Schylers"),color: Color(0xFFE0E0E0),size: 20,),
                                 labelText: '需求数量',
                                 labelStyle: TextStyle(fontSize: 15.0),
                                 border: InputBorder.none,
@@ -431,7 +421,7 @@ class _AddBodyState extends State<AddBody> {
                                 });
                               },
                               decoration: const InputDecoration(
-                                prefixIcon:Icon(Icons.credit_card),
+                                prefixIcon:Icon(IconData(0xe604,fontFamily: "Schylers"),color: Color(0xFFE0E0E0),size: 20,),
                                 labelText: '意向价格(¥)',
                                 labelStyle: TextStyle(fontSize: 15.0),
                                 border: InputBorder.none,
@@ -460,7 +450,7 @@ class _AddBodyState extends State<AddBody> {
                           });
                         },
                         decoration: const InputDecoration(
-                          prefixIcon:Icon(Icons.phone_iphone),
+                          prefixIcon:Icon(IconData(0xe614,fontFamily: "Schylers"),color: Color(0xFFE0E0E0),size: 20,),
                           labelText: '联系电话',
                           labelStyle: TextStyle(fontSize: 15.0),
                           border: InputBorder.none,
@@ -475,7 +465,7 @@ class _AddBodyState extends State<AddBody> {
                       child: TextField(
                         keyboardType: TextInputType.text,
                         decoration: const InputDecoration(
-                          prefixIcon:Icon(Icons.sort_by_alpha),
+                          prefixIcon:Icon(Icons.sort_by_alpha,color: Color(0xFFE0E0E0)),
                           labelText: '品名',
                           labelStyle: TextStyle(fontSize: 15.0),
                           border: InputBorder.none,
@@ -492,7 +482,7 @@ class _AddBodyState extends State<AddBody> {
                       child: TextField(
                         keyboardType: TextInputType.text,
                         decoration: const InputDecoration(
-                          prefixIcon:Icon(Icons.sort_by_alpha),
+                          prefixIcon:Icon(IconData(0xe619,fontFamily: "Schylers"),color: Color(0xFFE0E0E0),size: 20,),
                           labelText: '品位',
                           labelStyle: TextStyle(fontSize: 15.0),
                           border: InputBorder.none,
@@ -523,14 +513,14 @@ class _AddBodyState extends State<AddBody> {
                             },
                             child: Row(
                               children: <Widget>[
-                                const Icon(Icons.location_on,color: Color(0xFF8b8b8b)),
+                                const Icon(Icons.location_on,color: Color(0xFFE0E0E0)),
                                 Container(
                                   // width: 230,
                                   padding: const EdgeInsets.fromLTRB(13.0, 0.0, 0.0, 0.0),
                                   child:Row(
                                     // alignment: WrapAlignment.start,
                                     children: <Widget>[
-                                    Text("交货地点: ",style: TextStyle(fontSize: 15.0,color: Color(0xFF8b8b8b)),),
+                                    Text("交货地点: ",style: TextStyle(fontSize: 15.0),),
                                     Container(
                                       padding: const EdgeInsets.fromLTRB(0.0, 1.0, 0.0, 0.0),
                                       child: Text(localhigh,style: TextStyle(fontSize: 13.0,color: Colors.black,),overflow: TextOverflow.ellipsis,),
@@ -561,7 +551,7 @@ class _AddBodyState extends State<AddBody> {
                                       child:Row(
                                         // alignment: WrapAlignment.start,
                                         children: <Widget>[
-                                        Text("截止日期: ",style: TextStyle(fontSize: 15.0,color: Color(0xFF8b8b8b)),),
+                                        Text("截止日期: ",style: TextStyle(fontSize: 15.0,color: Color(0xFFE0E0E0)),),
                                       ],)
                                     ),
                                   ],
@@ -599,7 +589,7 @@ class _AddBodyState extends State<AddBody> {
                         maxLines: 2,
                         keyboardType: TextInputType.text,
                         decoration: const InputDecoration(
-                          prefixIcon:Icon(Icons.more),
+                          prefixIcon:Icon(Icons.more,color: Color(0xFFE0E0E0)),
                           labelText: '描述一下',
                           labelStyle: TextStyle(fontSize: 15.0),
                           border: InputBorder.none,
@@ -710,7 +700,7 @@ class _AddBodyState extends State<AddBody> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
-                                Icon(Icons.photo,color: Colors.blue,size: 100.0,),
+                                Icon(Icons.photo,color:Color(0xFF245399),size: 100.0,),
                                 Text("添加轮播图片",style: TextStyles.TextStyle4(),),
                               ],
                             ),
@@ -816,7 +806,7 @@ class _AddBodyState extends State<AddBody> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
-                                Icon(Icons.photo,color: Colors.blue,size: 100.0,),
+                                Icon(Icons.photo,color: Color(0xFF245399),size: 100.0,),
                                 Text("添加详情图片",style: TextStyles.TextStyle4(),),
                               ],
                             ),
@@ -924,33 +914,36 @@ class _SelectMetalsOptionsState extends State<SelectMetalsOptions> {
           runSpacing: 5.0,
           children: List<Widget>.generate(
             releasePageContent["variety"].length, (int index) {
-              return Ink(
-                width: 85.0,
-                height: 40.0,
-                child:InkWell(
-                  onTap: () {
-                    setState(() {
-                      vts();
-                      vt[index]=true;
-                      cateValue = releasePageContent["variety"][index]["id"];
-                    });
-                  },
-                  child: Container(
-                    alignment: Alignment.center,
-                    child:new Text(
-                      releasePageContent["variety"][index]["name"],
-                      overflow: TextOverflow.ellipsis,
-                      style:new TextStyle(
-                        fontSize: 14.0,
-                        color: vt[index]==true?Colors.blue:Colors.black,
-                      )
+              return Material(
+                color: Color(0xFFF0EFF5),
+                child:Ink(
+                  width: 85.0,
+                  height: 40.0,
+                  child:InkWell(
+                    onTap: () {
+                      setState(() {
+                        vts();
+                        vt[index]=true;
+                        cateValue = releasePageContent["variety"][index]["id"];
+                      });
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      child:new Text(
+                        releasePageContent["variety"][index]["name"],
+                        overflow: TextOverflow.ellipsis,
+                        style:new TextStyle(
+                          fontSize: 14.0,
+                          color: vt[index]==true?Color(0xFF245399):Colors.black,
+                        )
+                      ),
+                      decoration: BoxDecoration(
+                        color:Color(0xFFEEEEEE),
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
                     ),
-                    decoration: BoxDecoration(
-                      color:Color(0xFFEEEEEE),
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
-                  ),
-                )
+                  )
+                ),
               );
             },
           ).toList(),

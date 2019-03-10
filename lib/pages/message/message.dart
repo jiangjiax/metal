@@ -16,16 +16,6 @@ class _MessageState extends State<Message> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Color(0xFF64B5F6),
-                Color(0xFF1976D2),
-              ],
-            ),
-          ),
-        ),   
         elevation: 0.0,
         title: new Text('消息'),
       ),
@@ -70,14 +60,7 @@ class _MessageheaderState extends State<Messageheader> {
             padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
             height: 100,
             width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Color(0xFF64B5F6),
-                  Color(0xFF1976D2),
-                ],
-              ),
-            ), 
+            color: Color(0xFF245399),
             child: Text("50条未读消息",style: TextStyle(color: Colors.white,fontSize: 15.0),),
           ),
           Positioned(

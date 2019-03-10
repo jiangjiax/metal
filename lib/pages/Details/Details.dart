@@ -4,16 +4,17 @@ import 'dart:async';
 import 'package:metal/pages/message/chat.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:metal/data/global_home.dart';
 import 'package:fluwx/fluwx.dart' as fluwx;
+import 'package:metal/pages/Details/video.dart';
+import 'package:metal/pages/my/user.dart';
 
-bool type = false;
-bool typeoffer = false;
+bool type = true;
+bool typeoffer = true;
 var varietys = "";
 
 class Details extends StatefulWidget {
-  Details({Key key, this.index}) : super(key: key);
+  Details({Key key, this.index}) : super(key: key); 
   final int index;
 
   @override
@@ -31,33 +32,33 @@ class _DetailsState extends State<Details> {
   }
   void initState() { 
     super.initState();
-    setState(() {
-      cons["pid"] = "2";
-      print(cons);
-      if (homePageContent["list"][this.widget.index]["tid"]=="1") {
-        type=true;
-      }else{
-        type=false;
-      }
-      if (homePageContent["offer"]!=null) {
-        typeoffer=true;
-      }else{
-        typeoffer=false;
-      }
-    });
+    // setState(() {
+    //   cons["pid"] = "2";
+    //   print(cons);
+    //   if (homePageContent["list"][this.widget.index]["tid"]=="1") {
+    //     type=true;
+    //   }else{
+    //     type=false;
+    //   }
+    //   if (homePageContent["offer"]!=null) {
+    //     typeoffer=true;
+    //   }else{
+    //     typeoffer=false;
+    //   }
+    // });
     _initFluwx();
     fluwx.responseFromAuth.listen((data) {
       setState(() {
         _result = "${data.errCode}";
       });
     });
-    List<Widget>.generate(
-      homePageContent["variety"].length, (int index) {
-        if(homePageContent["variety"][index]["id"]==homePageContent["list"][this.widget.index]["variety"]){
-          varietys = homePageContent["variety"][index]["name"];
-        }
-      }
-    );
+    // List<Widget>.generate(
+    //   homePageContent["variety"].length, (int index) {
+    //     if(homePageContent["variety"][index]["id"]==homePageContent["list"][this.widget.index]["variety"]){
+    //       varietys = homePageContent["variety"][index]["name"];
+    //     }
+    //   }
+    // );
   }
 
   String _text = "share text from fluwx";
@@ -70,8 +71,6 @@ class _DetailsState extends State<Details> {
         .then((data) {
       print(data);
     });
-
-//    fluwx.sendAuth(WeChatSendAuthModel(scope: "snsapi_userinfo",state: "wechat_sdk_demo_test"));
   }
 
   void handleRadioValueChanged(fluwx.WeChatScene scene) {
@@ -79,6 +78,8 @@ class _DetailsState extends State<Details> {
       this.scene = scene;
     });
   }
+
+  bool imgorvideo = true;
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -86,7 +87,7 @@ class _DetailsState extends State<Details> {
         elevation: 0.0,     
         title: new Text('需求详情'),
         actions: <Widget>[
-          new IconButton(icon: new Icon(Icons.share), onPressed:(){
+          new IconButton(icon: new Icon(IconData(0xe653,fontFamily: "Schylers"),size: 25,), onPressed:(){
             fluwx.share(fluwx.WeChatShareTextModel(
                 text: "text from fluwx",
                 transaction: "transaction}",//仅在android上有效，下同。
@@ -95,36 +96,72 @@ class _DetailsState extends State<Details> {
           }),
         ],
       ),
-      body: Container(
-        color: Color(0xFFEEEEEE),
-        child:ListView(
-          children: <Widget>[
-            SwiperPages(index: this.widget.index,),
-            Detailsheader(index: this.widget.index,),
-            Interval_space(),
-            DetailsMore(index: this.widget.index,),
-            Interval_space(),
-            DetailsMoreTwo(index: this.widget.index,),
-            typeoffer?
-            new FutureBuilder(
-              future: getHomePageContent(urls,cons),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return DetailsTable();
-                } else if (snapshot.hasError) {
-                  return new Text("${snapshot.error}");
-                }
+      body: 
+        Container(
+          color: Color(0xFFEEEEEE),
+          child:ListView(
+            children: <Widget>[
+              Stack(
+                children: <Widget>[
+                  imgorvideo?Video():SwiperPages(index: this.widget.index,),
+                  Positioned(
+                    left: 90.0,
+                    child: Row(
+                      children: <Widget>[
+                        ButtonBar(
+                          children: <Widget>[
+                            FlatButton(
+                              child: Text("图片"),
+                              color: imgorvideo?Colors.grey:Color(0xFF245399),
+                              textColor: Colors.white,
+                              onPressed: (){
+                                setState(() {
+                                  imgorvideo=false;
+                                });
+                              },
+                            ),
+                            FlatButton(
+                              child: Text("视频"),
+                              color: imgorvideo?Color(0xFF245399):Colors.grey,
+                              textColor: Colors.white,
+                              onPressed: (){
+                                setState(() {
+                                  imgorvideo=true;
+                                });
+                              },
+                            )
+                          ],
+                        )
+                      ],
+                    )
+                  ),
+                ]
+              ),
+              Detailsheader(index: this.widget.index,),
+              Interval_space(),
+              DetailsMore(index: this.widget.index,),
+              Interval_space(),
+              DetailsMoreTwo(index: this.widget.index,),
+              typeoffer?
+              new FutureBuilder(
+                future: getHomePageContent(urls,cons),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return DetailsTable();
+                  } else if (snapshot.hasError) {
+                    return new Text("${snapshot.error}");
+                  }
 
-                // By default, show a loading spinner
-                return new Center(
-                  child:CircularProgressIndicator()
-                );
-              }
-            )
-            :Container(),
-          ],
-        )
-      ),
+                  // By default, show a loading spinner
+                  return new Center(
+                    child:CircularProgressIndicator()
+                  );
+                }
+              )
+              :Container(),
+            ],
+          )
+        ),
       bottomNavigationBar: DemoBottomAppBar()
     );
   }
@@ -138,7 +175,7 @@ class DemoBottomAppBar extends StatefulWidget {
 }
 class _DemoBottomAppBarState extends State<DemoBottomAppBar> {
   static Icon collectionBefor = Icon(Icons.star_border,size: 24.0,);
-  static Icon collectionAfter = Icon(Icons.star,size: 24.0,color: Colors.blue,);
+  static Icon collectionAfter = Icon(Icons.star,size: 24.0,color: Color(0xFF245399),);
   static Icon collection = collectionBefor;
 
   @override
@@ -274,7 +311,7 @@ class _BuyButtonState extends State<BuyButton> {
   Widget build(BuildContext context) {
     return Container(
       child:FlatButton(
-        color: Colors.blue,
+        color: Color(0xFF245399),
         child: Container(
           padding: const EdgeInsets.fromLTRB(15.0, 12.0, 15.0, 12.0),
           child: Text("报价",style: new TextStyle(fontSize: 18.0,color: Colors.white),),
@@ -294,7 +331,7 @@ class SellButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child:FlatButton(
-        color: Colors.blue,
+        color: Color(0xFF245399),
         child: Container(
           padding: const EdgeInsets.fromLTRB(15.0, 12.0, 15.0, 12.0),
           child: Text("下单",style: new TextStyle(fontSize: 18.0,color: Colors.white),),
@@ -344,46 +381,76 @@ class Detailsheader extends StatefulWidget {
 class _DetailsheaderState extends State<Detailsheader> {
   @override
   Widget build(BuildContext context) {
+    Paint pg = Paint();
+    pg.color = Colors.green;
+    Paint tui = Paint();
+    tui.color = Colors.blue;
     return new Container(
-      padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+      padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0.0),
       color: Colors.white,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Container(
-            child: Container(
-              child: Wrap(
-                direction: Axis.horizontal,
-                children: <Widget>[
-                  Text(
-                    homePageContent["list"][this.widget.index]["title"].toString(),
-                    style: new TextStyle(fontSize: 18.0,fontWeight: FontWeight.bold),
-                    overflow: TextOverflow.ellipsis,
-                    softWrap: true,
-                    maxLines: 2,
-                  ), 
-                ],
-              ),
-            ),
+            alignment: Alignment.topLeft,
+            child:Flex(
+              direction: Axis.horizontal,
+              children: <Widget>[               
+                Expanded(
+                  child:Container(
+                    child:RichText(
+                      text: TextSpan(
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: ' 采购 ',
+                            style: TextStyle(fontSize: 13.0,color: Colors.white,background: pg),
+                          ),
+                          TextSpan(
+                            text: ' 收购一切含铜废料购80%以上联系收购一切含铜废料购80%以上联系收购一切含铜废料购80%以上联系收购一切含铜废料购80%以上联系收购一切含铜废料购80%以上联系',
+                            style: TextStyle(fontSize: 16.0,fontWeight: FontWeight.bold,color: Colors.black),
+                          ),
+                        ],
+                      ),
+                      overflow: TextOverflow.ellipsis,maxLines: 2
+                    )
+                  )
+                ),
+              ],
+            )
           ),
           Row(
             children: <Widget>[
               Container(
-                padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
+                padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 2.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-                    // Text('意向价格',style: TextStyles.TextStyle4(),),
-                    Text("¥ ${homePageContent["list"][this.widget.index]["price"].toString()}元/吨",style: new TextStyle(fontSize: 15.0,fontWeight: FontWeight.bold,color: Colors.red),),
+                    Text('意向价格 ',style: TextStyles.TextStyle4(),),
+                    Text("¥100元/吨",style: new TextStyle(fontSize: 15.0,fontWeight: FontWeight.bold,color: Colors.red),),
                   ],
                 ),
               ),
-              type?Buy():Sell(),
             ],
           ),
           Container(
-            padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
+            child: Row(
+              children: <Widget>[
+                Text("已经",style: TextStyles.TextStyle4(),),
+                Text("1",style: new TextStyle(fontSize: 14.0,color: Colors.blue,fontWeight: FontWeight.bold),),
+                Text("位报价",style: TextStyles.TextStyle4(),),
+                Padding(padding: EdgeInsets.fromLTRB(6, 0, 0, 0),),
+                Text("还需",style: TextStyles.TextStyle4(),),
+                Expanded(
+                  child: Container(
+                    child: Text("5吨",style: new TextStyle(fontSize: 14.0,color: Colors.green,fontWeight: FontWeight.bold),overflow: TextOverflow.ellipsis,),
+                  ),
+                )
+              ],
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
             child:Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
@@ -393,32 +460,32 @@ class _DetailsheaderState extends State<Detailsheader> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        Icon(Icons.people,color: Color(0xFF616161),size: 15.0,),
-                        Text(' 浏览: ${homePageContent["list"][this.widget.index]["click"]}',style: TextStyles.TextStyle4(),)
+                        Icon(Icons.people,color: Color(0xFFdbdbdb),size: 15.0,),
+                        Text(' 浏览: 10',style: TextStyles.TextStyle4(),)
                       ],
                     ),
                   )
                 ),
-                // Expanded(
-                //   flex: 1,
-                //   child: Container(
-                //     child: Row(
-                //       mainAxisAlignment: MainAxisAlignment.center,
-                //       children: <Widget>[
-                //         Icon(Icons.location_on,color: Color(0xFF616161),size: 15.0,),
-                //         Text(' ${homePageContent["list"][this.widget.index]["province"].toString()} ${homePageContent["list"][this.widget.index]["city"].toString()}',style: TextStyles.TextStyle4(),)
-                //       ],
-                //     ),
-                //   )
-                // ),
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Container(height: 15,width: 15,child: Image.asset("images/地址.png"),),
+                        Text(' 浙江 台州',style: TextStyles.TextStyle4(),)
+                      ],
+                    ),
+                  )
+                ),
                 Expanded(
                   flex: 1,
                   child: Container(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
-                        Icon(Icons.timelapse,color: Color(0xFF616161),size: 15.0,),
-                        Text(' ${homePageContent["list"][this.widget.index]["atime"].toString()}',style: TextStyles.TextStyle4(),)
+                        Container(height: 15,width: 15,child: Image.asset("images/时间.png"),),
+                        Text(' 19/01/27',style: TextStyles.TextStyle4(),)
                       ],
                     ),
                   )
@@ -426,34 +493,81 @@ class _DetailsheaderState extends State<Detailsheader> {
               ],
             )
           ),
+          new Divider(height: 0,),
+          Container(
+            alignment: Alignment.center,
+            padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+            child: Flex(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              direction: Axis.horizontal,
+              children: <Widget>[
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    alignment: Alignment.center,
+                    child: Column(
+                      children: <Widget>[
+                        Icon(IconData(0xe648,fontFamily: "Schylers"),size: 40,color: Color(0xFF757575),),
+                        Text("信息已审查",style: TextStyle(fontSize: 13,color:Color(0xFF757575) ),)
+                      ],
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    alignment: Alignment.center,
+                    child: Column(
+                      children: <Widget>[
+                        Container(
+                          margin: EdgeInsets.fromLTRB(0, 0, 8, 0),
+                          child: Icon(IconData(0xe602,fontFamily: "Schylers"),size: 40,color: Color(0xFF757575),),
+                        ),
+                        Text("企业会员",style: TextStyle(fontSize: 13,color:Color(0xFF757575) ),)
+                      ],
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    alignment: Alignment.center,
+                    child: Column(
+                      children: <Widget>[
+                        Icon(IconData(0xe649,fontFamily: "Schylers"),size: 40,color: Color(0xFF757575),),
+                        Text("1人供应",style: TextStyle(fontSize: 13,color:Color(0xFF757575) ),)
+                      ],
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    alignment: Alignment.center,
+                    child: Column(
+                      children: <Widget>[
+                        Icon(IconData(0xe907,fontFamily: "Schylers"),size: 40,color: Color(0xFF757575),),
+                        Text("需要检验",style: TextStyle(fontSize: 13,color:Color(0xFF757575) ),)
+                      ],
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    alignment: Alignment.center,
+                    child: Column(
+                      children: <Widget>[
+                        Icon(IconData(0xe614,fontFamily: "Schylers"),size: 40,color: Color(0xFF757575),),
+                        Text("电话联系",style: TextStyle(fontSize: 13,color:Color(0xFF757575) ),)
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
-      ),
-    );
-  }
-}
-
-class Buy extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.fromLTRB(10.0, 10.0, 0.0, 0.0),
-      padding: const EdgeInsets.fromLTRB(2.0, 0.0, 2.0, 0.0),
-      child: Text('采购资源',style: new TextStyle(fontSize: 12.0,color:Colors.green),),
-      decoration: BoxDecoration(
-        border: Border.all(width: 1,color: Colors.green)
-      ),
-    );
-  }
-}
-class Sell extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.fromLTRB(10.0, 10.0, 0.0, 0.0),
-      padding: const EdgeInsets.fromLTRB(2.0, 0.0, 2.0, 0.0),
-      child: Text('供应资源',style: new TextStyle(fontSize: 12.0,color:Colors.red),),
-      decoration: BoxDecoration(
-        border: Border.all(width: 1,color: Colors.red)
       ),
     );
   }
@@ -477,11 +591,12 @@ class _DetailsMoreTwoState extends State<DetailsMoreTwo> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
+          new Divider(height: 0,),
           Container(
             height: 25.0,
             child: Row(
               children: <Widget>[
-                Container(color:Colors.blue,width: 4.0,),
+                Container(color:Color(0xFF245399),width: 4.0,),
                 Container(
                   padding: const EdgeInsets.fromLTRB(4.0, 0.0, 0.0, 0.0),
                   child: Text('产品详情',style: TextStyles.TextStyle2(),),
@@ -502,7 +617,7 @@ class _DetailsMoreTwoState extends State<DetailsMoreTwo> {
                     children: <Widget>[
                       Text(
                         // homePageContent["list"][this.widget.index].toString(),
-                        homePageContent["list"][this.widget.index]["content_word"]==null?"":homePageContent["list"][this.widget.index]["content_word"],
+                        "需要满80%以后收购",
                         style: new TextStyle(fontSize: 15.0,color: Color(0XFF424242)),
                         overflow:TextOverflow.ellipsis,
                         maxLines: 3,
@@ -517,16 +632,16 @@ class _DetailsMoreTwoState extends State<DetailsMoreTwo> {
                     ],
                   )
                 ),
-                homePageContent["list"][this.widget.index]["content_word"]!=null?new Divider(height: 0,color: Color(0xFFBDBDBD),):new Container(),
+                new Divider(height: 0,),
                 Container(
                   padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
                   child:Wrap(
                     direction: Axis.horizontal,
                     children: List<Widget>.generate(
-                      homePageContent["list"][this.widget.index]["content_img"]==null?0:homePageContent["list"][this.widget.index]["content_img"].length
+                      2
                       , (int index) {
                       return Image.network(
-                        "$urler${homePageContent["list"][this.widget.index]["content_img"][index]["pathname"].toString()}",
+                        "$urler${homePageContent["ad"][index]["pathname"].toString()}",
                       );
                       },
                     ).toList(),
@@ -551,6 +666,16 @@ class DetailsMore extends StatefulWidget {
   }
 }
 class _DetailsMoreState extends State<DetailsMore> {
+  static SlideTransition createTransition(
+    Animation<double> animation, Widget child) {
+      return new SlideTransition(
+          position: new Tween<Offset>(
+          begin: const Offset(1.0, 0.0),
+          end: const Offset(0.0, 0.0),
+      ).animate(animation),
+          child: child,
+      );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -559,11 +684,12 @@ class _DetailsMoreState extends State<DetailsMore> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
+          new Divider(height: 0,),
           Container(
             height: 25.0,
             child: Row(
               children: <Widget>[
-                Container(color:Colors.blue,width: 4.0,),
+                Container(color:Color(0xFF245399),width: 4.0,),
                 Container(
                   padding: const EdgeInsets.fromLTRB(4.0, 0.0, 0.0, 0.0),
                   child: Text('产品说明',style: TextStyles.TextStyle2(),),
@@ -573,184 +699,236 @@ class _DetailsMoreState extends State<DetailsMore> {
           ),
           new Divider(height: 0,),
           Container(
-            padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+            padding: const EdgeInsets.fromLTRB(10.0, 8.0, 10.0, 0.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Container(
-                  child: Wrap(
-                  direction: Axis.horizontal,
+                  child:Flex(
+                    direction: Axis.horizontal,
                     children: <Widget>[
-                        Text(
-                        homePageContent["list"][this.widget.index]["title"].toString(),
-                        style: TextStyles.TextStyle1(),
-                        overflow: TextOverflow.ellipsis,
-                        softWrap: true,
-                        maxLines: 2,
-                      ), 
-                    ],
+                      Expanded(
+                        flex: 2,
+                        child: Container(
+                          child: Text('品种',style: new TextStyle(fontSize: 15,color: Colors.black)),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 6,
+                        child: Container(
+                          child: Text("铜废料",style: new TextStyle(fontSize: 15.0,color: Color(0xFF616161)),overflow:TextOverflow.ellipsis,),
+                        )
+                      ),
+                    ],  
+                  )
+                ),
+                new Divider(height: 15,),
+                Container(
+                  child:Flex(
+                    direction: Axis.horizontal,
+                    children: <Widget>[
+                      Expanded(
+                        flex: 2,
+                        child: Container(
+                          child: Text('品名',style: new TextStyle(fontSize: 15,color: Colors.black)),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 6,
+                        child: Container(
+                          child: Text("金属",style: new TextStyle(fontSize: 15.0,color: Color(0xFF616161)),overflow:TextOverflow.ellipsis,),
+                        )
+                      ),
+                    ],  
+                  )
+                ),
+                new Divider(height: 15,),
+                Container(
+                  child:Flex(
+                    direction: Axis.horizontal,
+                    children: <Widget>[
+                      Expanded(
+                        flex: 2,
+                        child: Container(
+                          child: Text('品位',style: new TextStyle(fontSize: 15,color: Colors.black)),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 6,
+                        child: Container(
+                          child: Text("废铜",style: new TextStyle(fontSize: 15.0,color: Color(0xFF616161)),overflow:TextOverflow.ellipsis,),
+                        )
+                      ),
+                    ],  
+                  )
+                ),
+                new Divider(height: 15,),
+                Container(
+                  child:Flex(
+                    direction: Axis.horizontal,
+                    children: <Widget>[
+                      Expanded(
+                        flex: 2,
+                        child: Container(
+                          child: Text('意向价格',style: new TextStyle(fontSize: 15,color: Colors.black)),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 6,
+                        child: Container(
+                          child: Text("¥100元/吨",style: new TextStyle(fontSize: 15.0,color: Color(0xFF616161)),overflow:TextOverflow.ellipsis,),
+                        )
+                      ),
+                    ],  
+                  )
+                ),
+                new Divider(height: 15,),
+                Container(
+                  child:Flex(
+                    direction: Axis.horizontal,
+                    children: <Widget>[
+                      Expanded(
+                        flex: 2,
+                        child: Container(
+                          child: Text('需求数量',style: new TextStyle(fontSize: 15,color: Colors.black)),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 6,
+                        child: Container(
+                          child: Text('100吨',style: new TextStyle(fontSize: 15.0,color: Color(0xFF616161)),overflow:TextOverflow.ellipsis,),
+                        )
+                      ),
+                    ],  
+                  )
+                ),
+                new Divider(height: 15,),
+                Container(
+                  child:Flex(
+                    direction: Axis.horizontal,
+                    children: <Widget>[
+                      Expanded(
+                        flex: 2,
+                        child: Container(
+                          child: Text('截止时间',style: new TextStyle(fontSize: 15,color: Colors.black,fontWeight: FontWeight.bold)),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 6,
+                        child: Container(
+                          child: Text("19/05/27 10:10",style: new TextStyle(fontSize: 15.0,color: Color(0xFF616161),fontWeight: FontWeight.bold),overflow:TextOverflow.ellipsis,),
+                        )
+                      ),
+                    ],  
+                  )
+                ),
+                new Divider(height: 15,),
+                Container(
+                  child:Flex(
+                    direction: Axis.horizontal,
+                    children: <Widget>[
+                      Expanded(
+                        flex: 2,
+                        child: Container(
+                          child: Text('发布时间',style: new TextStyle(fontSize: 15,color: Colors.black)),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 6,
+                        child: Container(
+                          child: Text("19/01/27 10:10",style: new TextStyle(fontSize: 15.0,color: Color(0xFF616161)),overflow:TextOverflow.ellipsis,),
+                        )
+                      ),
+                    ],  
+                  )
+                ),
+                new Divider(height: 15,),
+                Container(
+                  child:Flex(
+                    direction: Axis.horizontal,
+                    children: <Widget>[
+                      Expanded(
+                        flex: 2,
+                        child: Container(
+                          child: Text('交货地点',style: new TextStyle(fontSize: 15,color: Colors.black)),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 6,
+                        child: Container(
+                          child: Text('浙江省 台州市 椒江区',style: new TextStyle(fontSize: 15.0,color: Color(0xFF616161)),overflow:TextOverflow.ellipsis,),
+                        )
+                      ),
+                    ],  
+                  )
+                ),
+                new Divider(height: 15,),
+                Material(
+                  // color: Colors.white,
+                  child: Ink(
+                    child: InkWell(
+                      onTap: (){
+                        Navigator.push<String>(
+                          context,
+                          new PageRouteBuilder(pageBuilder: (BuildContext context,
+                              Animation<double> animation,
+                              Animation<double> secondaryAnimation) {
+                                // 跳转的路由对象
+                                return new Users(index: 1,);
+                          }, transitionsBuilder: (
+                            BuildContext context,
+                            Animation<double> animation,
+                            Animation<double> secondaryAnimation,
+                            Widget child,
+                          ) {
+                            return _DetailsMoreState
+                                .createTransition(animation, child);
+                          })
+                        );
+                      },
+                      child: Container(
+                        alignment: Alignment.topLeft,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Container(
+                              child: Row(
+                                children: <Widget>[
+                                  Container(
+                                    height: 50,
+                                    width: 50,
+                                    child:new CircleAvatar(
+                                      backgroundImage: new NetworkImage("https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=3463668003,3398677327&fm=58",),
+                                    ),
+                                  ),
+                                  Container(
+                                    child:Column(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Container(
+                                          padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                          child: Text("蒋家欣",style: TextStyle(fontSize: 15,color: Colors.black),),
+                                        ),
+                                        Container(
+                                          padding: EdgeInsets.fromLTRB(10, 4, 0, 0),
+                                          child: Text("适能旗舰店",style: TextStyle(fontSize: 13.0,color: Colors.black),),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Icon(Icons.keyboard_arrow_right,color: Color(0xFFE0E0E0),size: 20,)
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
                 ),
-                Container(
-                  padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
-                  child:Flex(
-                    direction: Axis.horizontal,
-                    children: <Widget>[
-                      Expanded(
-                        flex: 2,
-                        child: Container(
-                          child: Text('品种: ',style: new TextStyle(fontSize: 15.0,color: Colors.black,)),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 8,
-                        child: Container(
-                          child: Text(varietys,style: new TextStyle(fontSize: 15.0,color: Colors.black),overflow:TextOverflow.ellipsis,),
-                        )
-                      ),
-                    ],  
-                  )
-                ),
-                Container(
-                  padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
-                  child:Flex(
-                    direction: Axis.horizontal,
-                    children: <Widget>[
-                      Expanded(
-                        flex: 2,
-                        child: Container(
-                          child: Text('品名: ',style: new TextStyle(fontSize: 15.0,color: Colors.black,)),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 8,
-                        child: Container(
-                          child: Text(homePageContent["list"][this.widget.index]["name"],style: new TextStyle(fontSize: 15.0,color: Colors.black),overflow:TextOverflow.ellipsis,),
-                        )
-                      ),
-                    ],  
-                  )
-                ),
-                Container(
-                  padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
-                  child:Flex(
-                    direction: Axis.horizontal,
-                    children: <Widget>[
-                      Expanded(
-                        flex: 2,
-                        child: Container(
-                          child: Text('品种: ',style: new TextStyle(fontSize: 15.0,color: Colors.black,)),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 8,
-                        child: Container(
-                          child: Text(homePageContent["list"][this.widget.index]["ore"],style: new TextStyle(fontSize: 15.0,color: Colors.black),overflow:TextOverflow.ellipsis,),
-                        )
-                      ),
-                    ],  
-                  )
-                ),
-                Container(
-                  padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
-                  child:Flex(
-                    direction: Axis.horizontal,
-                    children: <Widget>[
-                      Expanded(
-                        flex: 2,
-                        child: Container(
-                          child: Text('参考价格: ',style: new TextStyle(fontSize: 15.0,color: Colors.black,)),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 8,
-                        child: Container(
-                          child: Text("¥100元/吨",style: new TextStyle(fontSize: 15.0,color: Colors.red),overflow:TextOverflow.ellipsis,),
-                        )
-                      ),
-                    ],  
-                  )
-                ),
-                Container(
-                  padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
-                  child:Flex(
-                    direction: Axis.horizontal,
-                    children: <Widget>[
-                      Expanded(
-                        flex: 2,
-                        child: Container(
-                          child: Text('需求数量: ',style: new TextStyle(fontSize: 15.0,color: Colors.black,)),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 8,
-                        child: Container(
-                          child: Text('${homePageContent["list"][this.widget.index]["number"]}${homePageContent["list"][this.widget.index]["unit"]}',style: new TextStyle(fontSize: 15.0,color: Colors.black),overflow:TextOverflow.ellipsis,),
-                        )
-                      ),
-                    ],  
-                  )
-                ),
-                type?Container(
-                  padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
-                  child:Flex(
-                    direction: Axis.horizontal,
-                    children: <Widget>[
-                      Expanded(
-                        flex: 2,
-                        child: Container(
-                          child: Text('截止时间: ',style: new TextStyle(fontSize: 15.0,color: Colors.black,)),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 8,
-                        child: Container(
-                          child: Text(homePageContent["list"][this.widget.index]["etime"],style: new TextStyle(fontSize: 15.0,color: Colors.black),overflow:TextOverflow.ellipsis,),
-                        )
-                      ),
-                    ],  
-                  )
-                ):Container(),
-                Container(
-                  padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
-                  child:Flex(
-                    direction: Axis.horizontal,
-                    children: <Widget>[
-                      Expanded(
-                        flex: 2,
-                        child: Container(
-                          child: Text('发布时间: ',style: new TextStyle(fontSize: 15.0,color: Colors.black,)),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 8,
-                        child: Container(
-                          child: Text(homePageContent["list"][this.widget.index]["atime"],style: new TextStyle(fontSize: 15.0,color: Colors.black),overflow:TextOverflow.ellipsis,),
-                        )
-                      ),
-                    ],  
-                  )
-                ),
-                Container(
-                  padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 5.0),
-                  child:Flex(
-                    direction: Axis.horizontal,
-                    children: <Widget>[
-                      Expanded(
-                        flex: 2,
-                        child: Container(
-                          child: Text('交货地点: ',style: new TextStyle(fontSize: 15.0,color: Colors.black,)),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 8,
-                        child: Container(
-                          child: Text('${homePageContent["list"][this.widget.index]["province"]} ${homePageContent["list"][this.widget.index]["city"]}',style: new TextStyle(fontSize: 15.0,color: Colors.black),overflow:TextOverflow.ellipsis,),
-                        )
-                      ),
-                    ],  
-                  )
-                ),
+                Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 10),)
               ],
             )
           ),
@@ -779,7 +957,7 @@ class _DetailsTableState extends State<DetailsTable> {
             height: 25.0,
             child: Row(
               children: <Widget>[
-                Container(color:Colors.blue,width: 4.0,),
+                Container(color:Color(0xFF245399),width: 4.0,),
                 Container(
                   padding: const EdgeInsets.fromLTRB(4.0, 0.0, 0.0, 0.0),
                   child: Text('报价列表',style: TextStyles.TextStyle2(),),
@@ -788,88 +966,207 @@ class _DetailsTableState extends State<DetailsTable> {
             ),
           ),
           new Divider(height: 0,),
-          Container(
-            alignment: Alignment.topLeft,
-            padding: const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 0.0),
-            child: Flex(
-              direction: Axis.horizontal,
+          new Container(
+            child: new ListView(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true, 
               children: <Widget>[
-                Expanded(
-                  flex: 1,
-                  child: Container(
-                    padding: const EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
-                    child: Text('名字',style: new TextStyle(fontSize: 15.0,fontWeight: FontWeight.bold),),
+                new Container(
+                  padding: EdgeInsets.all(10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Material(
+                        color: Colors.white,
+                        child: Ink(
+                          child: InkWell(
+                            child: Container(
+                              alignment: Alignment.topLeft,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Container(
+                                    child: Row(
+                                      children: <Widget>[
+                                        Container(
+                                          height: 35,
+                                          width: 35,
+                                          child:new CircleAvatar(
+                                            backgroundImage: new NetworkImage("https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=3463668003,3398677327&fm=58",),
+                                          ),
+                                        ),
+                                        Container(
+                                          child:Column(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Container(
+                                                padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                                child: Text("蒋家欣",style: TextStyle(fontSize: 13,color: Colors.black),),
+                                              ),
+                                              Container(
+                                                padding: EdgeInsets.fromLTRB(10, 4, 0, 0),
+                                                child: Text("适能旗舰店",style: TextStyle(fontSize: 11.0,color: Colors.black),),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.topLeft,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Container(
+                              child: Row(
+                                children: <Widget>[
+                                  Container(
+                                    padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                                    child:Column(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Container(
+                                          padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                          child: Row(
+                                            children: <Widget>[
+                                              Text("供应",style: TextStyle(fontSize: 13,color: Colors.black),),
+                                              Text("5",style: TextStyle(fontSize: 13,color: Colors.blue),),
+                                              Text("吨",style: TextStyle(fontSize: 13,color: Colors.black),),
+                                            ],
+                                          )
+                                        ),
+                                        Container(
+                                          padding: EdgeInsets.fromLTRB(10, 4, 0, 0),
+                                          child: Text("19/10/01 10:10",style: TextStyle(fontSize: 11.0,color: Colors.black),),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.all(4),
+                                    child: Text("已检验",style: TextStyle(fontSize: 14,color: Colors.white),),
+                                    color: Colors.green,
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                Expanded(
-                  flex: 1,
-                  child: Container(
-                    padding: const EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
-                    child: Text('报价',style: new TextStyle(fontSize: 15.0,fontWeight: FontWeight.bold),),
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Container(
-                    padding: const EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
-                    child: Text('库存',style: new TextStyle(fontSize: 15.0,fontWeight: FontWeight.bold),),
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Container(
-                    padding: const EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
-                    child: Text('报价日期',style: new TextStyle(fontSize: 15.0,fontWeight: FontWeight.bold),),
+                new Divider(height: 0,),
+                new Container(
+                  padding: EdgeInsets.all(10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Material(
+                        color: Colors.white,
+                        child: Ink(
+                          child: InkWell(
+                            child: Container(
+                              alignment: Alignment.topLeft,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Container(
+                                    child: Row(
+                                      children: <Widget>[
+                                        Container(
+                                          height: 35,
+                                          width: 35,
+                                          child:new CircleAvatar(
+                                            backgroundImage: new NetworkImage("https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=3463668003,3398677327&fm=58",),
+                                          ),
+                                        ),
+                                        Container(
+                                          child:Column(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Container(
+                                                padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                                child: Text("任一腾",style: TextStyle(fontSize: 13,color: Colors.black),),
+                                              ),
+                                              Container(
+                                                padding: EdgeInsets.fromLTRB(10, 4, 0, 0),
+                                                child: Text("新能源公司",style: TextStyle(fontSize: 11.0,color: Colors.black),),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.topLeft,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Container(
+                              child: Row(
+                                children: <Widget>[
+                                  Container(
+                                    padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                                    child:Column(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Container(
+                                          padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                          child: Row(
+                                            children: <Widget>[
+                                              Text("供应",style: TextStyle(fontSize: 13,color: Colors.black),),
+                                              Text("10",style: TextStyle(fontSize: 13,color: Colors.blue),),
+                                              Text("吨",style: TextStyle(fontSize: 13,color: Colors.black),),
+                                            ],
+                                          )
+                                        ),
+                                        Container(
+                                          padding: EdgeInsets.fromLTRB(10, 4, 0, 0),
+                                          child: Text("19/10/01 10:12",style: TextStyle(fontSize: 11.0,color: Colors.black),),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.all(4),
+                                    child: Text("未检验",style: TextStyle(fontSize: 14,color: Colors.white),),
+                                    color: Colors.red,
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
-          ),
-          new Divider(height: 0,),
-          Container(
-            padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 10.0),
-            width: MediaQuery.of(context).size.width,
-            child:Table(
-              columnWidths: const <int, TableColumnWidth>{
-                0: FixedColumnWidth(10.0),
-                1: FixedColumnWidth(10.0),
-                2: FixedColumnWidth(10.0),
-                3: FixedColumnWidth(10.0),
-              },
-              defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-              border: TableBorder.symmetric(
-                inside: BorderSide(
-                  color: Color(0xFFEEEEEE),
-                  width: 1.0,
-                )
-              ),
-              children: List<TableRow>.generate(
-                homePageContent["offer"]==null?0:homePageContent["offer"].length, (int index) {
-                  return TableRow(
-                    children: <Widget>[
-                      Container(
-                        padding: const EdgeInsets.fromLTRB(1.0, 5.0, 5.0, 1.0),
-                        child: Text(homePageContent["offer"][index]["name"],style: new TextStyle(fontSize: 14.0),),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.fromLTRB(1.0, 5.0, 5.0, 1.0),
-                        child: Text('${homePageContent["offer"][index]["price"]}元/${homePageContent["offer"][index]["unit"]}',style: new TextStyle(fontSize: 14.0),),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.fromLTRB(1.0, 5.0, 5.0, 1.0),
-                        child: Text('${homePageContent["offer"][index]["number"]}${homePageContent["offer"][index]["unit"]}',style: new TextStyle(fontSize: 14.0),),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.fromLTRB(1.0, 5.0, 5.0, 1.0),
-                        child: Text(homePageContent["offer"][index]["atime"],style: new TextStyle(fontSize: 14.0),),
-                      ),
-                    ],
-                  );
-                },
-              ).toList(),
-            ),
-          ),
-          new Divider(height: 0,),
+          )
         ],
       )
     );
@@ -953,7 +1250,7 @@ class _DBodyState extends State<DBody> {
                                 });
                               },
                               decoration: const InputDecoration(
-                                prefixIcon:Icon(Icons.credit_card),
+                                prefixIcon:Icon(IconData(0xe604,fontFamily: "Schylers"),size: 24,),
                                 labelText: '报价',
                                 labelStyle: TextStyle(fontSize: 15.0),
                                 border: InputBorder.none,
@@ -985,7 +1282,7 @@ class _DBodyState extends State<DBody> {
                                 });
                               },
                               decoration: const InputDecoration(
-                                prefixIcon:Icon(Icons.inbox),
+                                prefixIcon:Icon(IconData(0xe88f,fontFamily: "Schylers"),size: 26,),
                                 labelText: '库存',
                                 labelStyle: TextStyle(fontSize: 15.0),
                                 border: InputBorder.none,
@@ -1032,51 +1329,6 @@ class _DBodyState extends State<DBody> {
           )
         ]
       )
-    );
-  }
-}
-
-class SwiperPages extends StatefulWidget {
-  SwiperPages({Key key, this.index}) : super(key: key);
-  final int index;
-
-  @override
-  SwiperPagesState createState() {
-    return SwiperPagesState();
-  }
-}
-
-class SwiperPagesState extends State<SwiperPages> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: 200.0,
-      child: new Swiper(
-        itemCount: homePageContent["list"][this.widget.index]["imgs"].length,
-        // viewportFraction: 0.8,
-        // scale: 0.9,
-        autoplay: true,
-        loop:true,
-        duration: 1000,
-        autoplayDelay: 10000,
-        // control: new SwiperControl(),
-        onTap: (index) => print('点击了第$index个'),
-        pagination: new SwiperPagination(
-            margin: new EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 20.0),
-            builder: new DotSwiperPaginationBuilder(
-                color: Colors.white30,
-                activeColor: Colors.white,
-                size: 10.0,
-                activeSize: 8.0)
-        ),
-        itemBuilder: (BuildContext context, int index) {
-          return new Image.network(
-            "$urler${homePageContent["list"][this.widget.index]["imgs"][index]["pathname"].toString()}",
-            fit: BoxFit.fill,
-          );
-        },
-      ),
     );
   }
 }

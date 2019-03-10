@@ -10,15 +10,21 @@ class SearchBefore extends StatelessWidget {
         children: <Widget>[
           new Container(
             child: new Text("热门搜索", style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
-            padding: const EdgeInsets.fromLTRB(10.0, 10.0, 0.0, 10.0),
+            padding: const EdgeInsets.fromLTRB(10.0, 15.0, 10.0, 10.0),
             alignment: Alignment.topLeft,
           ),
           new Container(
             child: HotSeachers(),
           ),
           new Container(
-            child: new Text("搜索历史", style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
-            padding: const EdgeInsets.fromLTRB(10.0, 10.0, 0.0, 10.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                new Text("搜索历史", style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
+                Icon(Icons.delete_forever,color: Color(0xFFBDBDBD),)
+              ],
+            ),
+            padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
             alignment: Alignment.topLeft,
           ),
           new Container(
@@ -31,6 +37,16 @@ class SearchBefore extends StatelessWidget {
 }
 
 class HotSeachers extends StatelessWidget {
+  static SlideTransition createTransition(
+    Animation<double> animation, Widget child) {
+      return new SlideTransition(
+          position: new Tween<Offset>(
+          begin: const Offset(1.0, 0.0),
+          end: const Offset(0.0, 0.0),
+      ).animate(animation),
+          child: child,
+      );
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -47,12 +63,26 @@ class HotSeachers extends StatelessWidget {
               height: 40.0,
               child:InkWell(
                 onTap: () {
-                  Navigator.push( 
-                    context,
-                    new MaterialPageRoute(builder: (context) {
-                      return new SearchAfter(search:GlobalSearch.hot[index]);
-                    })
+                  Navigator.of(context).push(
+                    new MaterialPageRoute(builder: (context) => new SearchAfter(search:GlobalSearch.hot[index])),
                   );
+                  // Navigator.push<String>(
+                  //   context,
+                  //   new PageRouteBuilder(pageBuilder: (BuildContext context,
+                  //       Animation<double> animation,
+                  //       Animation<double> secondaryAnimation) {
+                  //         // 跳转的路由对象
+                  //         return new SearchAfter(search:GlobalSearch.hot[index]);
+                  //   }, transitionsBuilder: (
+                  //     BuildContext context,
+                  //     Animation<double> animation,
+                  //     Animation<double> secondaryAnimation,
+                  //     Widget child,
+                  //   ) {
+                  //     return HotSeachers
+                  //         .createTransition(animation, child);
+                  //   })
+                  // );
                 },
                 child: Container(
                   alignment: Alignment.center,
@@ -64,7 +94,7 @@ class HotSeachers extends StatelessWidget {
                     )
                   ),
                   decoration: BoxDecoration(
-                    color:Color(0xFFEEEEEE),
+                    color:Color(0xFFF0EFF5),
                     borderRadius: BorderRadius.circular(20.0),
                   ),
                 ),
@@ -78,6 +108,16 @@ class HotSeachers extends StatelessWidget {
 }
 
 class HistorySeachers extends StatelessWidget {
+  static SlideTransition createTransition(
+    Animation<double> animation, Widget child) {
+      return new SlideTransition(
+          position: new Tween<Offset>(
+          begin: const Offset(1.0, 0.0),
+          end: const Offset(0.0, 0.0),
+      ).animate(animation),
+          child: child,
+      );
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -94,10 +134,21 @@ class HistorySeachers extends StatelessWidget {
               height: 40.0,
               child:InkWell(
                 onTap: () {
-                  Navigator.push( 
+                  Navigator.push<String>(
                     context,
-                    new MaterialPageRoute(builder: (context) {
-                      return new SearchAfter(search:GlobalSearch.history[index]);
+                    new PageRouteBuilder(pageBuilder: (BuildContext context,
+                        Animation<double> animation,
+                        Animation<double> secondaryAnimation) {
+                          // 跳转的路由对象
+                          return new SearchAfter(search:GlobalSearch.history[index]);
+                    }, transitionsBuilder: (
+                      BuildContext context,
+                      Animation<double> animation,
+                      Animation<double> secondaryAnimation,
+                      Widget child,
+                    ) {
+                      return HotSeachers
+                          .createTransition(animation, child);
                     })
                   );
                 },
@@ -111,7 +162,7 @@ class HistorySeachers extends StatelessWidget {
                     )
                   ),
                   decoration: BoxDecoration(
-                    color:Color(0xFFEEEEEE),
+                    color:Color(0xFFF0EFF5),
                     borderRadius: BorderRadius.circular(20.0),
                   ),
                 ),

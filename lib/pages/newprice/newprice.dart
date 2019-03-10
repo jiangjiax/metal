@@ -62,7 +62,7 @@ class _SelectState extends State<Select> {
             height: 25.0,
             child: Row(
               children: <Widget>[
-                Container(color:Colors.blue,width: 4.0,),
+                Container(color:Color(0xFF245399),width: 4.0,),
                 Container(
                   padding: const EdgeInsets.fromLTRB(4.0, 0.0, 0.0, 0.0),
                   child: Text('选择品种，查看行情',style: TextStyles.TextStyle2(),),
@@ -102,39 +102,41 @@ class _SelectMetalsOptionsState extends State<SelectMetalsOptions> {
           runSpacing: 5.0,
           children: List<Widget>.generate(
             metals.length, (int index) {
-              return Ink(
-                width: 85.0,
-                height: 40.0,
-                child:InkWell(
-                  onTap: () {
-                    setState(() {
-                      List<Widget>.generate(
-                        metals.length, (int index) {
-                          metals[index].color = false;
+              return Material(
+                color: Color(0xFFF0EFF5),
+                child:Ink(
+                  width: 85.0,
+                  height: 40.0,
+                  child:InkWell(
+                    onTap: () {
+                      setState(() {
+                        List<Widget>.generate(
+                          metals.length, (int index) {
+                            metals[index].color = false;
+                          }
+                        ).toList();
+                        if (metals[index].color == false) {
+                          metals[index].color = true;
                         }
-                      ).toList();
-                      if (metals[index].color == false) {
-                        metals[index].color = true;
-                      }
-                    });
-                    widget.callback(metals[index].text);
-                  },
-                  child: Container(
-                    alignment: Alignment.center,
-                    child:new Text(
-                      metals[index].text,
-                      overflow: TextOverflow.ellipsis,
-                      style:new TextStyle(
-                        fontSize: 14.0,
-                        color: metals[index].color==true?Colors.blue:Colors.black,
-                      )
+                      });
+                      widget.callback(metals[index].text);
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      child:new Text(
+                        metals[index].text,
+                        overflow: TextOverflow.ellipsis,
+                        style:new TextStyle(
+                          fontSize: 14.0,
+                          color: metals[index].color==true?Color(0xFF245399):Colors.black,
+                        )
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
                     ),
-                    decoration: BoxDecoration(
-                      color:Color(0xFFEEEEEE),
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
-                  ),
-                )
+                  )
+                ),
               );
             },
           ).toList(),
@@ -162,7 +164,7 @@ class _PriceState extends State<Price> {
             height: 25.0,
             child: Row(
               children: <Widget>[
-                Container(color:Colors.blue,width: 4.0,),
+                Container(color:Color(0xFF245399),width: 4.0,),
                 Container(
                   padding: const EdgeInsets.fromLTRB(4.0, 0.0, 0.0, 0.0),
                   child: Text('电线电缆',style: new TextStyle(fontSize: 15.0,color: Color(0xFF424242),fontWeight: FontWeight.bold),),
@@ -259,7 +261,7 @@ class _PriceState extends State<Price> {
                           });
                         },
                         child: Text("均价走势(¥)"),
-                        textColor: yj?Colors.blue:Colors.black,
+                        textColor: yj?Color(0xFF245399):Colors.black,
                       ),
                       Padding(padding: EdgeInsets.fromLTRB(1, 0, 0, 0),),
                       new OutlineButton(
@@ -269,7 +271,7 @@ class _PriceState extends State<Price> {
                           });
                         },
                         child: Text("月成交量(¥)"),
-                        textColor: yj?Colors.black:Colors.blue,
+                        textColor: yj?Colors.black:Color(0xFF245399),
                       )
                     ],
                   ),

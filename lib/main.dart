@@ -30,6 +30,10 @@
           '/loginpassword': (_) => new Passwordlogin(),
           '/index': (_) => new Navigatorpage(),
         },
+        theme: new ThemeData(
+          primaryColor: Color(0xFF245399),
+          primaryColorBrightness: Brightness.dark,
+        ),
         title: 'Flutter Demo',
         home: Navigatorpage(),
       );

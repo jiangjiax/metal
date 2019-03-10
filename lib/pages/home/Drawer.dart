@@ -150,7 +150,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
                     CateOptions(),
                   ],
                 ),
-                new Divider(color: Color(0xFFBDBDBD)),
+                new Divider(height: 15,),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 10.0),
                   child: Text("价格",style:TextStyles.TextStyle2(),), 
@@ -184,7 +184,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
                       Expanded(
                         flex: 1,
                         child: Container(
-                          child:Icon(Icons.import_export,color: Color(0xFF424242)),
+                          child:Icon(Icons.import_export,color: Color(0xFFBDBDBD)),
                         ),
                       ),
                       Expanded(
@@ -211,7 +211,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
                     ],
                   ),
                 ),
-                new Divider(color: Color(0xFFBDBDBD)),
+                new Divider(height: 15,),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 10.0),
                   child: Text("数量",style:TextStyles.TextStyle2(),), 
@@ -245,7 +245,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
                       Expanded(
                         flex: 1,
                         child: Container(
-                          child:Icon(Icons.import_export,color: Color(0xFF424242)),
+                          child:Icon(Icons.import_export,color: Color(0xFFBDBDBD)),
                         ),
                       ),
                       Expanded(
@@ -271,13 +271,13 @@ class _FilterDrawerState extends State<FilterDrawer> {
                     ],
                   ),
                 ),
-                new Divider(color: Color(0xFFBDBDBD)),
+                new Divider(height: 15,),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 10.0),
                   child: Text("品种",style:TextStyles.TextStyle2(),), 
                 ),
                 MetalsOptions(),
-                new Divider(color: Color(0xFFBDBDBD)),
+                new Divider(height: 15,),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 5.0),
                   child: Text("热门城市",style:TextStyles.TextStyle2(),), 
@@ -297,29 +297,26 @@ class _FilterDrawerState extends State<FilterDrawer> {
             alignment: Alignment.center,
             padding: const EdgeInsets.fromLTRB(55.0, 0.0, 0.0, 0.0),
             child:Row(children: <Widget>[
-              RaisedButton(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5.0)
-                ),
-                color: Color(0xFFE0E0E0),
+              FlatButton(
+                child: Text('取消',style: new TextStyle(fontSize: 15.0,color: Colors.black),),
                 onPressed: (){
                   Navigator.pop(context); 
                 },
-                child: Text('取消',style: new TextStyle(fontSize: 15.0,color: Colors.black),),
               ),
               Padding(padding: const EdgeInsets.fromLTRB(20.0, 0.0, 0.0, 0.0),),
               RaisedButton(
+                elevation: 0.0,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5.0)
                 ),
-                color: Color(0xFF64B5F6),
+                color: Color(0xFF245399),
                 onPressed: (){
                   setState(() {
                     conf();
                   });
                   Navigator.pop(context); 
                 },
-                child: Text('确定',style: new TextStyle(fontSize: 15.0,color: Colors.black),),
+                child: Text('确定',style: new TextStyle(fontSize: 15.0,color: Colors.white),),
               ),
             ],)
           ),
@@ -348,7 +345,7 @@ class _CityOptionsState extends State<CityOptions> {
       //  shape: new BeveledRectangleBorder(
       //    borderRadius: BorderRadius.circular(2.0),
       //  ),
-      backgroundColor: Color(0xFFEEEEEE),
+      backgroundColor: Color(0xFFF0EFF5),
         label: new Text(
           homePageContent["hotCity"][index]["name"],
           overflow: TextOverflow.ellipsis,
@@ -386,41 +383,43 @@ class _CateOptionsState extends State<CateOptions> {
         runSpacing: 6.0,
         children: List<Widget>.generate(
           Drawers.Cate.length, (int index) {
-            return Ink(
-              width: 90.0,
-              height: 40.0,
-              child:InkWell(
-                onTap: () {
-                  setState(() {
-                    if (Drawers.Cate[index].color == true) {
-                      Drawers.Cate[index].color = false;
-                      drawerCon = {};
-                    } else{
-                      Drawers.Cate[0].color = false;
-                      Drawers.Cate[1].color = false;
-                      Drawers.Cate[2].color = false;
-                      Drawers.Cate[index].color = true;
-                      drawerCon["tid"] = (index-1).toString();
-                      print(index);
-                    }
-                  });
-                  print(drawerCon);
-                },
-                child: Container( 
-                  alignment: Alignment.center,
-                  child:new Text(
-                    Drawers.Cate[index].text,
-                    overflow: TextOverflow.ellipsis,
-                    style:new TextStyle(
-                      fontSize: 15.0,
-                      color: Drawers.Cate[index].color==true?Colors.blue:Colors.black,
-                    )
+            return Material(
+              color:Color(0xFFF0EFF5),
+              child:Ink(
+                width: 90.0,
+                height: 40.0,
+                child:InkWell(
+                  onTap: () {
+                    setState(() {
+                      if (Drawers.Cate[index].color == true) {
+                        Drawers.Cate[index].color = false;
+                        drawerCon = {};
+                      } else{
+                        Drawers.Cate[0].color = false;
+                        Drawers.Cate[1].color = false;
+                        Drawers.Cate[2].color = false;
+                        Drawers.Cate[index].color = true;
+                        drawerCon["tid"] = (index-1).toString();
+                        print(index);
+                      }
+                    });
+                    print(drawerCon);
+                  },
+                  child: Container( 
+                    alignment: Alignment.center,
+                    child:new Text(
+                      Drawers.Cate[index].text,
+                      overflow: TextOverflow.ellipsis,
+                      style:new TextStyle(
+                        fontSize: 15.0,
+                        color: Drawers.Cate[index].color==true?Colors.blue:Colors.black,
+                      )
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
                   ),
-                  decoration: BoxDecoration(
-                    color:Color(0xFFEEEEEE),
-                    borderRadius: BorderRadius.circular(5.0),
-                  ),
-                ),
+                )
               )
             );
           },
@@ -472,7 +471,7 @@ class _MetalsOptionsState extends State<MetalsOptions> {
                       )
                     ),
                     decoration: BoxDecoration(
-                      color:Color(0xFFEEEEEE),
+                      color:Color(0xFFF0EFF5),
                       borderRadius: BorderRadius.circular(5.0),
                     ),
                   ),

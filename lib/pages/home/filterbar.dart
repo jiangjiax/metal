@@ -34,7 +34,16 @@ class _FilterbarState extends State<Filterbar> {
             child: new Container(
               height: 40.0,
               child: new FlatButton(
-                child: Text("综合",style: TextStyles.TextStyle1(),),
+                child:Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
+                      child:Icon(IconData(0xe6aa,fontFamily: "Schylers"),size: 18,)
+                    ),
+                    Text("综合",style: TextStyles.TextStyle1(),),
+                  ]
+                ),
                 onPressed: () {
                   onFlatButton(1,context);
                   eventBus.fire(cons);
@@ -42,9 +51,6 @@ class _FilterbarState extends State<Filterbar> {
                 },
                 textTheme: ButtonTextTheme.accent,
                 textColor: _textColorEntire,
-                highlightColor: Colors.blue,
-                // 按下的背景色
-                splashColor: Colors.blue,
                 color: _backColorEntire,
                 shape: BorderDirectional(
                   end: new BorderSide(color: Color(0xFFEEEEEE)),
@@ -58,7 +64,16 @@ class _FilterbarState extends State<Filterbar> {
             child: new Container(
               height: 40.0,
               child: new FlatButton(
-                child: Text("最新",style: TextStyles.TextStyle1(),),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
+                      child:Icon(Icons.fiber_new,color:_textColoNew,),
+                    ),
+                    Text("最新",style: TextStyles.TextStyle1(),),
+                  ]
+                ),
                 onPressed: () {
                   onFlatButton(2,context);
                   cons["sort"] = "1";
@@ -67,9 +82,6 @@ class _FilterbarState extends State<Filterbar> {
                 },
                 textTheme: ButtonTextTheme.accent,
                 textColor: _textColoNew,
-                highlightColor: Colors.blue,
-                // 按下的背景色
-                splashColor: Colors.blue,
                 color: _backColoNew,
                 shape: BorderDirectional(
                   end: new BorderSide(color: Color(0xFFEEEEEE),),
@@ -85,7 +97,16 @@ class _FilterbarState extends State<Filterbar> {
             child: new Container(
               height: 40.0,
               child: new FlatButton(
-                child: Text("最热",style: TextStyles.TextStyle1(),),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
+                      child:Icon(Icons.whatshot,color:_textColorNumber,),
+                    ),
+                    Text("最热",style: TextStyles.TextStyle1(),),
+                  ]
+                ),
                 onPressed: () {
                   cons["sort"] = "2";
                   print(cons);
@@ -94,9 +115,6 @@ class _FilterbarState extends State<Filterbar> {
                 },
                 textTheme: ButtonTextTheme.accent,
                 textColor: _textColorNumber,
-                highlightColor: Colors.blue,
-                // 按下的背景色
-                splashColor: Colors.blue,
                 color: _backColorNumber,
                 shape: BorderDirectional(
                   end: new BorderSide(color: Color(0xFFEEEEEE),),
@@ -113,11 +131,11 @@ class _FilterbarState extends State<Filterbar> {
                 child:Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text("筛选",style: TextStyles.TextStyle1(),),
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
-                      child:Icon(Icons.select_all,color:Colors.blue,),
-                    )
+                      padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
+                      child:Icon(IconData(0xe66c,fontFamily: "Schylers"),size: 18,)
+                    ),
+                    Text("筛选",style: TextStyles.TextStyle1(),),
                   ]
                 ),
                 onPressed: () {
@@ -125,10 +143,7 @@ class _FilterbarState extends State<Filterbar> {
                   this.widget.globals.currentState.openEndDrawer();
                 },
                 textTheme: ButtonTextTheme.accent,
-                textColor: Colors.blue,
-                highlightColor: Colors.blue,
-                // 按下的背景色
-                splashColor: Colors.blue,
+                textColor: Color(0xFF245399),
                 color: Colors.white,
                 shape: BorderDirectional(
                   // top: new BorderSide(color: Color(0xFFE0E0E0),),

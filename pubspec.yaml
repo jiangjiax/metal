@@ -31,6 +31,7 @@ dependencies:
   event_bus: ^1.0.1
   fluwx: ^0.6.0
   shared_preferences: ^0.4.3
+  chewie: ^0.9.6
 
 
 dev_dependencies:
@@ -60,6 +61,7 @@ flutter:
    - images/big.png
    - images/bigafter.png
    - images/logo.png
+   - images/logo.gif
    - images/电线.png
    - images/线路.png
    - images/不锈钢.png
@@ -71,10 +73,18 @@ flutter:
    - images/线路.png
    - images/循环.png
    - images/其他.png
+   - images/Car.png
+   - images/家用电器.png
+   - images/企业认证.png
+   - images/钱.png
+   - images/手机.png
    - images/at.jpg
    - images/rmb.jpg 
    - images/zfb.png
    - images/wx.png
+   - images/类目.png
+   - images/地址.png
+   - images/时间.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.
@@ -87,10 +97,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
+  fonts:
+    - family: Schylers
+      fonts:
+        - asset: fonts/iconfont.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro

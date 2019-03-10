@@ -13,19 +13,18 @@ class Navigatorpage extends StatefulWidget {
 }
 
 class _NavigatorpageState extends State<Navigatorpage> {
-  static final GlobalKey<ScaffoldState> _globalKey = new GlobalKey();
+  var _globalKey = new GlobalKey<ScaffoldState>();
 
   int _selectedIndex = 0;
   PageController _pageController;
   List<Widget> _pages;
 
   void initState() {
-    // print(ShareDataWidget.of(context).urls.toString());
     super.initState();
     //page
     _pageController = PageController(initialPage: _selectedIndex);
     _pages = [
-      HomePages(global: _globalKey),
+      HomePages(global:_globalKey),
       NewPrice(),
       Message(),
       My(),
@@ -37,15 +36,36 @@ class _NavigatorpageState extends State<Navigatorpage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // key: _globalKey,
+      key: _globalKey,
       endDrawer: appbars_page?FilterDrawer():null,
-      appBar: appbars_page?HomeAppbar():null,
+      // endDrawer: FilterDrawer(),
+      appBar:appbars_page?AppBar(
+        elevation: 0.0,
+        titleSpacing:10.0,
+        leading: new IconButton(
+          icon: new Image.asset(
+            "images/logo.gif",
+            height: 33,
+          ),
+          onPressed: () {},
+        ),
+        actions: <Widget>[
+          Builder(
+            builder: (context) =>new IconButton(
+              icon: Icon(Icons.menu),
+              onPressed: () {Scaffold.of(context).openEndDrawer();},
+            ),
+          ),
+        ],
+        title:BarSearch(value:"搜索金属"),
+      ):null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
         heroTag: 'Tag1',
         onPressed: onBigImgTap,
         child: Icon(Icons.add),
         elevation: 2.0,
+        backgroundColor: Color(0xFF245399),
       ),
       body: PageView.builder(
         physics:NeverScrollableScrollPhysics(),
@@ -68,16 +88,16 @@ class _NavigatorpageState extends State<Navigatorpage> {
       bottomNavigationBar: FABBottomAppBar(
         centerItemText: '发布',
         color: Colors.grey,
-        selectedColor: Colors.blue,
+        selectedColor: Color(0xFF245399),
         notchedShape: CircularNotchedRectangle(),
         onTabSelected: _onItemTapped,
         selectedIndexs:_selectedIndex,
         items: [
           FABBottomAppBarItem(iconData: Icons.home, text: '首页'),
-          FABBottomAppBarItem(iconData: Icons.call_missed, text: '行情'),
+          FABBottomAppBarItem(iconData: Icons.assessment, text: '行情'),
           FABBottomAppBarItem(iconData: Icons.message, text: '消息'),
           FABBottomAppBarItem(iconData: Icons.person, text: '我的'),
-        ],
+        ], 
       ),
     );
   }
@@ -91,13 +111,34 @@ class _NavigatorpageState extends State<Navigatorpage> {
         appbars_page = true;
       }
       _pageController.animateToPage(_selectedIndex,
-          duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
+          duration: Duration(milliseconds: 10), curve: Curves.easeInOut);
     });
   }
 
   void onBigImgTap() {
     Navigator.of(context).push(
       new MaterialPageRoute(builder: (context) => new Add(iniindex:0)),
+    );
+  }
+  
+  Widget HomeAppbar() {
+    return new AppBar(
+      elevation: 0.0,
+      titleSpacing:10.0,
+      leading: new IconButton(
+        icon: new Image.asset(
+          "images/logo.gif",
+          height: 35,
+        ),
+        onPressed: () {Scaffold.of(context).openEndDrawer();},
+      ),
+      actions: <Widget>[
+        new IconButton(
+          icon: Icon(Icons.menu),
+          onPressed: () {},
+        ),
+      ],
+      title:BarSearch(value:"搜索金属"),
     );
   }
 }

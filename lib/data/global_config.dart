@@ -55,16 +55,16 @@ class GlobalButton {
   static Color textColorAfter = Colors.white;
 
   static Color backColorBefore = Colors.white;
-  static Color backColorAfter = Colors.blue;
+  static Color backColorAfter = Color(0xFF245399);
 }
 
 class TextStyles {
 //  黑字加粗
   static TextStyle1() {return new TextStyle(fontSize: 16.0,fontWeight: FontWeight.bold);}
 //  灰色小字
-  static TextStyle2() {return new TextStyle(fontSize: 15.0,color: Color(0xFF424242));}
+  static TextStyle2() {return new TextStyle(fontSize: 15.0,color: Color(0xFF757575));}
 //  灰色更小字
-  static TextStyle3() {return new TextStyle(fontSize: 13.0,color: Color(0xFF424242));}
+  static TextStyle3() {return new TextStyle(fontSize: 12.0,color: Color(0xFF757575));}
 //  更浅的灰色更小字
   static TextStyle4() {return new TextStyle(fontSize: 12.0,color: Color(0xFF616161));}
 }
@@ -131,9 +131,9 @@ List<Value> metals = <Value>[
       backcolor: Colors.pink,
     ),
     Value(
-      text: '线路板',
+      text: '报废车废料',
       color: false,
-      image:  "images/线路.png",
+      image:  "images/Car.png",
       backcolor: Colors.green,
     ),
     Value(
@@ -177,6 +177,18 @@ List<Value> metals = <Value>[
       color: false,
       image:  "images/其他.png",
       backcolor: Colors.teal,
+    ),
+    Value(
+      text: '手机废料',
+      color: false,
+      image:  "images/手机.png",
+      backcolor: Colors.grey,
+    ),
+    Value(
+      text: '废旧电器',
+      color: false,
+      image:  "images/家用电器.png",
+      backcolor: Colors.indigo,
     ),
 ];
 
@@ -357,3 +369,36 @@ String localarea="";
 String localid="";
 String localcityid="";
 String localareaid="";
+
+class Listoffer {
+  String name;
+  String price;
+  String kc;
+  String data;
+  //1：等待付款中；2：已付款，等待平台确认；3：订单已完成；
+  //1：已报价，等待确认；2：等待付款中；3：已付款，等待平台确认；4：订单已完成；
+  int state;
+  String number;
+
+  Listoffer({this.name, this.price, this.kc, this.data});
+}
+List<Listoffer> offer = <Listoffer>[
+    Listoffer(
+      name: '蒋家欣',
+      price: '10000',
+      kc:  "20",
+      data: "19/10/12",
+    ),
+    Listoffer(
+      name: '任一腾',
+      price: '10000',
+      kc:  "100",
+      data: "19/10/13",
+    ),
+    Listoffer(
+      name: '蒋家欣蒋家欣蒋家欣蒋家欣蒋家欣蒋家欣',
+      price: '999999',
+      kc:  "20",
+      data: "19/10/15",
+    ),
+];

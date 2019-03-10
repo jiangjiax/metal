@@ -14,9 +14,9 @@ class SearchAfter extends StatefulWidget {
   }
 }
 class _SearchAfterState extends State<SearchAfter> {
-  static GlobalKey<ScaffoldState> _globalKey = new GlobalKey();
   ScrollController _controller = new ScrollController();
   bool showToTopBtn = false; //是否显示“返回到顶部”按钮
+  var _globalKey = new GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -46,16 +46,6 @@ class _SearchAfterState extends State<SearchAfter> {
       key: _globalKey,
       endDrawer: FilterDrawer(),
       appBar: new AppBar(
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Color(0xFF64B5F6),
-                Color(0xFF1976D2),
-              ],
-            ),
-          ),
-        ),   
         elevation: 0.0,
         title: BarSearch(value:this.widget.search),
       ),
