@@ -22,6 +22,10 @@ class My extends StatefulWidget {
 
 class PersonPagerState extends State<My> {
   @override
+  void initState() { 
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
@@ -33,6 +37,16 @@ class PersonPagerState extends State<My> {
             );
           },
         ),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Color(0xFF64B5F6),
+                Color(0xFF1976D2),
+              ],
+            ),
+          ),
+        ),   
         elevation: 0.0,
       ),
       body:ListView(
@@ -64,7 +78,14 @@ class MyHeaderState extends State<MyHeader> {
           padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
           height: 45,
           width: MediaQuery.of(context).size.width,
-          color: Color(0xFF245399),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Color(0xFF64B5F6),
+                Color(0xFF1976D2),
+              ],
+            ),
+          ), 
         ),
         Positioned(
           top: 0,
@@ -238,7 +259,7 @@ class MyBodyState extends State<MyBody> {
                           Text(" 我的发布",style:TextStyle(fontSize: 16.0))
                         ],)
                       ),
-                      Icon(Icons.keyboard_arrow_right,size: 30,color: Color(0xFFF0EFF5),),
+                      Icon(Icons.keyboard_arrow_right,size: 30,color: Colors.teal,),
                     ],
                   ),
                 ),
@@ -282,7 +303,7 @@ class MyBodyState extends State<MyBody> {
                           Text(" 我的订单",style:TextStyle(fontSize: 16.0))
                         ],)
                       ),
-                      Icon(Icons.keyboard_arrow_right,size: 30,color: Color(0xFFF0EFF5),),
+                      Icon(Icons.keyboard_arrow_right,size: 30,color: Colors.orange,),
                     ],
                   ),
                 ),
@@ -326,7 +347,7 @@ class MyBodyState extends State<MyBody> {
                           Text(" 我的钱包",style:TextStyle(fontSize: 16.0))
                         ],)
                       ),
-                      Icon(Icons.keyboard_arrow_right,size: 30,color: Color(0xFFF0EFF5)),
+                      Icon(Icons.keyboard_arrow_right,size: 30,color: Colors.pink,),
                     ],
                   ),
                 ),
@@ -356,7 +377,7 @@ class MyBodyState extends State<MyBody> {
                           Text(" 我的粉丝",style:TextStyle(fontSize: 16.0))
                         ],)
                       ),
-                      Icon(Icons.keyboard_arrow_right,size: 30,color: Color(0xFFF0EFF5)),
+                      Icon(Icons.keyboard_arrow_right,size: 30,color: Colors.purpleAccent,),
                     ],
                   ),
                 ),
@@ -399,7 +420,7 @@ class MyBodyState extends State<MyBody> {
                           Text(" 我的检验",style:TextStyle(fontSize: 16.0))
                         ],)
                       ),
-                      Icon(Icons.keyboard_arrow_right,size: 30,color: Color(0xFFF0EFF5)),
+                      Icon(Icons.keyboard_arrow_right,size: 30,color: Colors.lime,),
                     ],
                   ),
                 ),
@@ -444,7 +465,7 @@ class MyBodyState extends State<MyBody> {
                           Text(" 企业认证",style:TextStyle(fontSize: 16.0))
                         ],)
                       ),
-                      Icon(Icons.keyboard_arrow_right,size: 30,color: Color(0xFFF0EFF5),),
+                      Icon(Icons.keyboard_arrow_right,size: 30,color: Colors.blueGrey,),
                     ],
                   ),
                 ),
@@ -488,7 +509,7 @@ class MyBodyState extends State<MyBody> {
                           Text(" 联系客服",style:TextStyle(fontSize: 16.0))
                         ],)
                       ),
-                      Icon(Icons.keyboard_arrow_right,size: 30,color: Color(0xFFF0EFF5),),
+                      Icon(Icons.keyboard_arrow_right,size: 30,color: Colors.blue,),
                     ],
                   ),
                 ),
